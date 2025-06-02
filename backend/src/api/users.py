@@ -1,12 +1,66 @@
 from typing_extensions import List
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends, Response
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select
-from src.schemas.users import UsersSchema
-from src.api.dependencies import SessionDep
 from src.models.users import UsersModel
-
+from src.schemas.users import UsersSchema
+from src.api.dependencies import (
+    add_to_blacklist,
+    pwd_context, 
+    SessionDep,
+    oauth2_scheme,
+    create_access_token,
+    authenticate_user,
+    token_blacklist,
+    verify_password
+)
 
 router = APIRouter(prefix="/users")
+
+@router.post("/login", tags=["Авторизация"])
+async def login_user(
+    session: SessionDep,
+    form_data: OAuth2PasswordRequestForm = Depends()
+):
+    user = await authenticate_user(form_data.username, form_data.password, session)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    access_token = create_access_token(data={"sub": user.username})
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_info": {
+            "username": user.username,
+            "user_id": user.id
+        }
+    }
+
+@router.post("/logout", tags=["Выход"])
+async def logout_user(
+    session: SessionDep,
+    response: Response,
+    token: str = Depends(oauth2_scheme),
+):
+    try:
+        await add_to_blacklist(token)
+
+        response.delete_cookie("access_token")
+        
+        return {
+            "message": "Logout successful",
+            "detail": "Token invalidated. Client should discard the token."
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Logout error: {str(e)}"
+        )
 
 
 @router.post("/v1", response_model=List[UsersSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить пользователя"])
@@ -21,10 +75,11 @@ async def add_user(user_data: UsersSchema, session: SessionDep):
                 detail="Username already exist."
             )
         new_user = UsersModel(
+            role=user_data.role,
             username=user_data.username,
             first_name=user_data.first_name,
             last_name=user_data.last_name,
-            password=user_data.password,
+            password=pwd_context.hash(user_data.password),
             contact=user_data.contact,
             vin=user_data.vin
         )
@@ -42,6 +97,9 @@ async def add_user(user_data: UsersSchema, session: SessionDep):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error creating user: {str(e)}"
         )
+
+
+
 
 @router.get("/v2", response_model=List[UsersSchema], tags=["Все пользователи"])
 async def get_all_users(session: SessionDep):
