@@ -8,4 +8,3 @@ class UsersSchema(BaseModel):
     last_name: str
     password: str
     contact: str
-    vin: str

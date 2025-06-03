@@ -12,5 +12,5 @@ class UsersModel(Base):
     last_name: Mapped[str] = mapped_column()
     password: Mapped[str] = mapped_column()
     contact: Mapped[str] = mapped_column()
-    vin: Mapped[str] = mapped_column()
+
     

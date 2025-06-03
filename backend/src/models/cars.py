@@ -11,5 +11,6 @@ class CarsModel(Base):
     series: Mapped[str] = mapped_column()
     number: Mapped[str] = mapped_column(unique=True)
     age: Mapped[str] = mapped_column()
+    vin: Mapped[str] = mapped_column()
 
     

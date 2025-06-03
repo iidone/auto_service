@@ -8,3 +8,4 @@ class CarsSchema(BaseModel):
     mileage: str
     age: str
     maintenance_id: int
+    vin: str
