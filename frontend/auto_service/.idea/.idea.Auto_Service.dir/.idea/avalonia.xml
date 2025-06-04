@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="App.axaml" value="Auto_Service.csproj" />
+        <entry key="Views/LoginWindow.axaml" value="Auto_Service.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

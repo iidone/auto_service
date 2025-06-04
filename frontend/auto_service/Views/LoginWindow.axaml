@@ -1,0 +1,49 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Auto_Service.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Auto_Service.Views.LoginWindow"
+        x:DataType="vm:LoginWindowViewModel"
+        Title="Автосервис 'АвтоТаз'"
+        Background="DimGray">
+        
+    <Window.Styles>
+        <Style Selector="TextBox.Def">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Margin" Value = "0 5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="Background" Value="#D3D3D3"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+        <Style Selector="TextBlock.text">
+            <Setter Property="Margin" Value="0 3"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="Foreground" Value="#D3D3D3"/>
+            <Setter Property="FontSize" Value="22"/>
+        </Style>
+    </Window.Styles>
+
+
+    
+    
+    <StackPanel Margin="20" VerticalAlignment="Center" Width="500">
+        <TextBlock FontFamily="Verdana" FontSize="28" Foreground="#D3D3D3" HorizontalAlignment="Center">Authorization</TextBlock>
+        <TextBlock Classes="text" Text = "Username:"/>
+        <TextBox Text = "{Binding Username}" Classes="Def" Watermark="Enter your username:"></TextBox>
+        <TextBlock Classes="text" Text = "Password:"></TextBlock>
+        <TextBox Text = "{Binding Password}" Classes="Def" PasswordChar="*" Watermark="Enter your password"></TextBox>
+        <Button Command = "{Binding LoginCommand}" 
+                Margin="0 20 " Padding=" 45 10 10 10" FontSize="18" FontFamily="Verdana" Foreground="#D3D3D3" Background="#2F1C07" Width="150" Height="50" HorizontalAlignment="Center" 
+                Content="Войти"
+                IsEnabled="{Binding !IsLoading}"/>
+        <TextBlock Text = "{Binding ErrorMessage}" Foreground="Red"/>
+        <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}"/>
+    </StackPanel>
+</Window>
