@@ -8,3 +8,4 @@ class MaintenancesSchema(BaseModel):
     date: str
     next_maintenance: str
     comment: str
+    price: str

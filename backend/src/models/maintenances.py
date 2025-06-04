@@ -12,3 +12,4 @@ class MaintenancesModel(Base):
     date: Mapped[str] = mapped_column()
     next_maintenance: Mapped[str] = mapped_column()
     comment: Mapped[str] = mapped_column()
+    price: Mapped[str] = mapped_column()
