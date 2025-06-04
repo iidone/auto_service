@@ -61,6 +61,8 @@ async def logout_user(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Logout error: {str(e)}"
         )
+    
+
 
 
 @router.post("/v1", response_model=List[UsersSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить пользователя"])
