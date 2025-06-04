@@ -7,10 +7,8 @@ class WorksModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     work_type: Mapped[str] = mapped_column()
-    date: Mapped[str] = mapped_column()
     deadline: Mapped[str] = mapped_column()
-    next_maintenance: Mapped[str] = mapped_column()
-    comment: Mapped[str] = mapped_column()
+
 
 
 

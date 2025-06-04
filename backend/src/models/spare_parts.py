@@ -11,6 +11,5 @@ class SparePartsModel(Base):
     article: Mapped[str] = mapped_column(unique=True)
     analog: Mapped[str] = mapped_column()
     supplier: Mapped[str] = mapped_column()
-    deadlines: Mapped[str] = mapped_column()
     price: Mapped[str] = mapped_column()
     
