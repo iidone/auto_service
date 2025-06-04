@@ -1,0 +1,16 @@
+﻿# Avalonia / .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.nupkg
+packages/
+
+# Ресурсы (если не нужно коммитить)
+*.ico
+*.png
+*.jpg
+
+# Специфичные для Avalonia
+avalonia-diagnostics.
