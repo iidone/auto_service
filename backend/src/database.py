@@ -2,8 +2,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.pool import NullPool
+from src.models import *
 
-DATABASE_URL = "postgresql+asyncpg://postgres:808808@localhost:5432/auto_service"
+DATABASE_URL = "postgresql+asyncpg://postgres:admin@localhost:5432/auto_service"
 
 engine = create_async_engine(DATABASE_URL, echo=True, poolclass=NullPool)
 
@@ -22,3 +23,5 @@ async def get_session():
 
 class Base(DeclarativeBase):
     pass
+
+

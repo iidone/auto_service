@@ -81,7 +81,6 @@ async def add_user(user_data: UsersSchema, session: SessionDep):
             last_name=user_data.last_name,
             password=pwd_context.hash(user_data.password),
             contact=user_data.contact,
-            vin=user_data.vin
         )
         session.add(new_user)
         await session.commit()

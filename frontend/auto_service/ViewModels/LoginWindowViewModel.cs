@@ -4,6 +4,7 @@ using ReactiveUI;
 using Avalonia;
 using System.Reactive;
 using System.Windows.Input;
+using Auto_Service.Models;
 using Auto_Service.Services;
 
 namespace Auto_Service.ViewModels;
@@ -53,7 +54,7 @@ public class LoginWindowViewModel : ReactiveObject
 
                 if (string.IsNullOrEmpty(result.Error))
                 {
-                    TokenStorageService.AuthToken = result.Token;
+                    TokenStorageService.AuthToken = result.AccessToken;
                     Console.Write("Вы авторизованы!");
 
                 }
