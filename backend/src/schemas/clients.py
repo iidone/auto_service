@@ -1,7 +1,10 @@
 from pydantic import BaseModel
 
 
-class CarsSchema(BaseModel):
+class ClientsSchema(BaseModel):
+    first_name: str
+    last_name: str
+    contact: str
     brand: str
     series: str
     number: str
