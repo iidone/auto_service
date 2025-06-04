@@ -61,6 +61,8 @@ async def logout_user(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Logout error: {str(e)}"
         )
+    
+
 
 
 @router.post("/v1", response_model=List[UsersSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить пользователя"])
@@ -81,7 +83,6 @@ async def add_user(user_data: UsersSchema, session: SessionDep):
             last_name=user_data.last_name,
             password=pwd_context.hash(user_data.password),
             contact=user_data.contact,
-            vin=user_data.vin
         )
         session.add(new_user)
         await session.commit()
