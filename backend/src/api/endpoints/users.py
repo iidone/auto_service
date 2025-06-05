@@ -37,7 +37,8 @@ async def login_user(
         "token_type": "bearer",
         "user_info": {
             "username": user.username,
-            "user_id": user.id
+            "user_id": user.id,
+            "user_role": user.role
         }
     }
 
