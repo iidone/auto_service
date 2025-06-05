@@ -3,7 +3,7 @@ from src.database import Base
 
 
 class ClientsModel(Base):
-    __tablename__ = "cars"
+    __tablename__ = "clients"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     first_name: Mapped[str] = mapped_column()
@@ -12,6 +12,7 @@ class ClientsModel(Base):
     brand: Mapped[str] = mapped_column()
     series: Mapped[str] = mapped_column()
     number: Mapped[str] = mapped_column(unique=True)
+    mileage: Mapped[str] = mapped_column()
     age: Mapped[str] = mapped_column()
     vin: Mapped[str] = mapped_column()
     last_maintenance: Mapped[str] = mapped_column()

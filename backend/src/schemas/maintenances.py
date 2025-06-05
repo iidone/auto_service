@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class MaintenancesSchema(BaseModel):
@@ -8,4 +8,6 @@ class MaintenancesSchema(BaseModel):
     date: str
     next_maintenance: str
     comment: str
+    status: str
     price: str
+    model_config = ConfigDict(from_attributes=True)

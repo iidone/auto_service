@@ -65,7 +65,7 @@ async def logout_user(
 
 
 
-@router.post("/v1", response_model=List[UsersSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить пользователя"])
+@router.post("/add_user", response_model=List[UsersSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить пользователя"])
 async def add_user(user_data: UsersSchema, session: SessionDep):
     try:
         existing_user = await session.execute(
@@ -102,7 +102,7 @@ async def add_user(user_data: UsersSchema, session: SessionDep):
 
 
 
-@router.get("/v2", response_model=List[UsersSchema], tags=["Все пользователи"])
+@router.get("/all_users", response_model=List[UsersSchema], tags=["Все пользователи"])
 async def get_all_users(session: SessionDep):
     try:
         result = await session.execute(select(UsersModel))
