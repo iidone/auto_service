@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
@@ -38,7 +39,18 @@ namespace Auto_Service
             base.OnFrameworkInitializationCompleted();
         }
 
-        public static int Main(string[] args) => BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        public static IServiceProvider? Services { get; private set; }
+
+        public static void Main(string[] args)
+        {
+            var builder = BuildAvaloniaApp();
+            
+            var services = new ServiceCollection();
+            services.AddSingleton<IWindowService, WindowService>();
+            Services = services.BuildServiceProvider();
+
+            builder.StartWithClassicDesktopLifetime(args);   
+        }
 
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
@@ -50,8 +62,6 @@ namespace Auto_Service
                     var services = new ServiceCollection();
                     services.AddSingleton<TokenStorageService>();
                     services.AddSingleton<AuthService>();
-                    
-            
                     var serviceProvider = services.BuildServiceProvider();
                 });
 

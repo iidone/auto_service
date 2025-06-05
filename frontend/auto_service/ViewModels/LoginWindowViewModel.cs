@@ -6,6 +6,8 @@ using System.Reactive;
 using System.Windows.Input;
 using Auto_Service.Models;
 using Auto_Service.Services;
+using Auto_Service.Views;
+using Avalonia.Controls;
 
 namespace Auto_Service.ViewModels;
 
@@ -15,7 +17,7 @@ public class LoginWindowViewModel : ReactiveObject
     private string _password = "";
     private string _errorMessage = "";
     private bool _isLoading;
-
+    private readonly IWindowService _windowService;
     public string Username
     {
         get => _username;
@@ -39,11 +41,12 @@ public class LoginWindowViewModel : ReactiveObject
         get => _isLoading;
         set => this.RaiseAndSetIfChanged(ref _isLoading, value);
     }
-    public ReactiveCommand<Unit, Unit> LoginCommand { get; }
+    public ReactiveCommand<Window, Unit> LoginCommand { get; }
 
-    public LoginWindowViewModel(AuthService authService)
+    public LoginWindowViewModel(AuthService authService,  IWindowService windowService)
     {
-        LoginCommand = ReactiveCommand.CreateFromTask(async () =>
+        _windowService = windowService;
+        LoginCommand = ReactiveCommand.CreateFromTask<Window>(async (currentWindow) =>
         {
             try
             {
@@ -56,7 +59,8 @@ public class LoginWindowViewModel : ReactiveObject
                 {
                     TokenStorageService.AuthToken = result.AccessToken;
                     Console.Write("Вы авторизованы!");
-
+                    _windowService.ShowWindow(new MainWindow {DataContext = new MainWindowViewModel()});
+                    _windowService.CloseWindow(currentWindow);
                 }
                 else
                 {

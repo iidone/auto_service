@@ -5,6 +5,7 @@
       <map>
         <entry key="App.axaml" value="Auto_Service.csproj" />
         <entry key="Views/LoginWindow.axaml" value="Auto_Service.csproj" />
+        <entry key="Views/MainWindow.axaml" value="Auto_Service.csproj" />
       </map>
     </option>
   </component>

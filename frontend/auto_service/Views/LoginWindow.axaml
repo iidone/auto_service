@@ -8,12 +8,12 @@
         x:DataType="vm:LoginWindowViewModel"
         Title="Автосервис 'АвтоТаз'"
         Background="#1B1B1B">
-        
+    
     <Window.Styles>
         <Style Selector="TextBox.Def">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Height" Value="50"/>
-            <Setter Property="Margin" Value = "0 5"/>
+            <Setter Property="Margin" Value="0 5"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="FontFamily" Value="Verdana"/>
             <Setter Property="Background" Value="Black"/>
@@ -30,20 +30,19 @@
         </Style>
     </Window.Styles>
 
-
-    
-    
     <StackPanel Margin="20" VerticalAlignment="Center" Width="500">
         <TextBlock FontFamily="Verdana" FontSize="28" Foreground="#D3D3D3" HorizontalAlignment="Center">Авторизация</TextBlock>
-        <TextBlock Classes="text" Text = "Username:"/>
-        <TextBox Text = "{Binding Username}" Classes="Def" Watermark="Enter your username:"></TextBox>
-        <TextBlock Classes="text" Text = "Password:"></TextBlock>
-        <TextBox Text = "{Binding Password}" Classes="Def" PasswordChar="*" Watermark="Enter your password"></TextBox>
-        <Button Command = "{Binding LoginCommand}" 
-                Margin="0 20 " Padding=" 45 10 10 10" FontSize="18" FontFamily="Verdana" Foreground="#D3D3D3" Background="#2C2C2C" Width="150" Height="50" HorizontalAlignment="Center" 
-                Content="Войти"
+        <TextBlock Classes="text" Text="Username:"/>
+        <TextBox Text="{Binding Username}" Classes="Def" Watermark="Enter your username"/>
+        <TextBlock Classes="text" Text="Password:"/>
+        <TextBox Text="{Binding Password}" Classes="Def" PasswordChar="*" Watermark="Enter your password"/>
+        <Button Command="{Binding LoginCommand}" 
+                Margin="0 20" Padding="45 10" FontSize="18" FontFamily="Verdana" 
+                Foreground="#D3D3D3" Background="#2C2C2C" Width="150" Height="50" 
+                HorizontalAlignment="Center" Content="Войти"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                 IsEnabled="{Binding !IsLoading}"/>
-        <TextBlock Text = "{Binding ErrorMessage}" Foreground="Red"/>
+        <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"/>
         <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}"/>
     </StackPanel>
 </Window>
