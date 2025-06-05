@@ -1,6 +1,12 @@
-﻿namespace Auto_Service.ViewModels;
+﻿using Auto_Service.Models;
+using ReactiveUI;
 
-public class MainWindowViewModel
+namespace Auto_Service.ViewModels;
+
+public class MainWindowViewModel : ReactiveObject
 {
+        
     
+
+
 }

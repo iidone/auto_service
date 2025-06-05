@@ -59,7 +59,8 @@ public class LoginWindowViewModel : ReactiveObject
                 {
                     TokenStorageService.AuthToken = result.AccessToken;
                     Console.Write("Вы авторизованы!");
-                    _windowService.ShowWindow(new MainWindow {DataContext = new MainWindowViewModel()});
+                    var mainWindow = CreateWindowForRole(UserInfo.UserRole);
+                    _windowService.ShowWindow(mainWindow);
                     _windowService.CloseWindow(currentWindow);
                 }
                 else
@@ -76,5 +77,15 @@ public class LoginWindowViewModel : ReactiveObject
         });
     }
 
+    private Window CreateWindowForRole(string role)
+    {
+        return role switch
+        {
+            "master" => new MasterWindow() {DataContext = new MasterWindowViewModel() },
+            "manager" => new ManagerWindow() {DataContext = new ManagerWindowViewModel() },
+            "admin"  => new AdminWindow() {DataContext = new AdminWindowViewModel() },
+            "storekeeper"  => new StoreWindow() {DataContext = new StoreWindowViewModel() }
+        };
+    }
 
 }

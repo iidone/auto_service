@@ -12,4 +12,5 @@ public class UserInfo
 {
     public string Username { get; set; }
     public int UserId { get; set; }
+    public static string UserRole { get; set; }
 }
