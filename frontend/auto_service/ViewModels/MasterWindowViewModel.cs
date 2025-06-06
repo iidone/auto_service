@@ -5,6 +5,8 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Auto_Service.Models;
 using Auto_Service.Services;
+using Auto_Service.Views;
+using Avalonia.Controls;
 using ReactiveUI;
 
 namespace Auto_Service.ViewModels
@@ -15,6 +17,7 @@ namespace Auto_Service.ViewModels
         private readonly int _masterId;
         private ObservableCollection<WorkMasterResponce> _works = new();
         private bool _isLoading;
+        private readonly IWindowService _windowService;
 
         public ObservableCollection<WorkMasterResponce> Works
         {
@@ -29,6 +32,7 @@ namespace Auto_Service.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> LoadWorksCommand { get; }
+        public ReactiveCommand<WorkMasterResponce, Unit> ShowDetailsCommand { get; }
 
         public MasterWindowViewModel(MaintenancesService service, int masterId)
         {
@@ -36,11 +40,20 @@ namespace Auto_Service.ViewModels
             
             _service = service;
             _masterId = masterId;
-
+            
             LoadWorksCommand = ReactiveCommand.CreateFromTask(LoadWorksAsync);
+            ShowDetailsCommand = ReactiveCommand.Create<WorkMasterResponce>(ShowDetails);
             LoadInitialData();
         }
-
+        
+        private static void ShowDetails(WorkMasterResponce selectedWork)
+        {
+            var detailsWindow = new DetailWindow
+            {
+                DataContext = new DetailWindowViewModel(selectedWork)
+            };
+            detailsWindow.Show();
+        }
         private void LoadInitialData()
         {
             Debug.WriteLine("Запуск начальной загрузки данных");
@@ -66,12 +79,11 @@ namespace Auto_Service.ViewModels
                 }
 
                 Works = new ObservableCollection<WorkMasterResponce>(works);
-                Debug.WriteLine($"Успешно загружено {works.Count} работ");
+                Console.WriteLine($"Успешно загружено {works.Count} работ");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Критическая ошибка при загрузке: {ex}");
-                // Можно добавить отображение ошибки пользователю
             }
             finally
             {

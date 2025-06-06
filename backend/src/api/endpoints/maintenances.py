@@ -94,7 +94,6 @@ class MaintenanceWithClientResponse(BaseModel):
     maintenance: MaintenancesSchema
     client: ClientsSchema
 
-router = APIRouter(prefix="/maintenances")
 
 @router.get("/by_master/{master_id}",
            response_model=List[MaintenanceWithClientResponse],

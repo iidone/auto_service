@@ -16,7 +16,8 @@ public partial class MasterWindow : Window
         this.Width = 800;
         this.Height = 600;
         var _service = new MaintenancesService(new HttpClient());
-        DataContext = new MasterWindowViewModel(_service, user_id );
+        DataContext = new MasterWindowViewModel(_service, user_id);
         InitializeComponent();
     }
+
 }

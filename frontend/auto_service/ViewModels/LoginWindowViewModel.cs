@@ -84,7 +84,7 @@ public class LoginWindowViewModel : ReactiveObject
         var maintenance_service = new MaintenancesService(new HttpClient());
         return role switch
         {
-            "master" => new MasterWindow(_user_id) {DataContext = new MasterWindowViewModel(maintenance_service, _user_id ) },
+            "master" => new MasterWindow(_user_id) {DataContext = new MasterWindowViewModel(maintenance_service, _user_id) },
             "manager" => new ManagerWindow() {DataContext = new ManagerWindowViewModel() },
             "admin"  => new AdminWindow() {DataContext = new AdminWindowViewModel() },
             "storekeeper"  => new StoreWindow() {DataContext = new StoreWindowViewModel() },
