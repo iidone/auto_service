@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing_extensions import List
 
 
 class SparePartsSchema(BaseModel):
@@ -9,3 +10,5 @@ class SparePartsSchema(BaseModel):
     supplier: str
     price: str
     
+class DeleteSparePartsRequest(BaseModel):
+    ids: List[int] 
