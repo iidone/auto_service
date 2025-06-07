@@ -1,9 +1,77 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:Auto_Service.ViewModels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Auto_Service.Views.MasterWindow"
-        Title="MasterWindow">
-    Welcome to Avalonia!
+        Title="MasterWindow"
+        Background="#1B1B1B"
+        x:DataType="vm:MasterWindowViewModel"
+        x:Name="mainWindow">
+        
+    <Window.Styles>
+        <Style Selector="TextBlock.Def">
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="Foreground" Value="#D3D3D3"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Border.b1">
+            <Setter Property="Background" Value="#333"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Width" Value="450"/>
+            <Setter Property="Height" Value="70"/>
+        </Style>
+    </Window.Styles>
+    
+    <StackPanel>
+        <TextBlock Classes="Def" Text="Ваши работы"/>
+        
+        <Border BorderBrush="AliceBlue" Background="#212121" CornerRadius="10" 
+                Margin="10" Padding="15" BorderThickness="1" Width="530">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
+                <ItemsControl ItemsSource="{Binding Works}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.ShowDetailsCommand, 
+                                    ElementName=mainWindow}"
+                                    CommandParameter="{Binding}">
+                                <Button.Styles>
+                                    <Style Selector="Button">
+                                        <Setter Property="Width" Value="450"/>
+                                        <Setter Property="Margin" Value="5"/>
+                                        <Setter Property="CornerRadius" Value="20"/>
+                                        <Setter Property="Height" Value="70"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="IsEnabled" Value="True"/>
+                                    </Style>
+                                    <Style Selector="Button:pointerover">
+                                        <Setter Property="BorderBrush" Value="White"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                    </Style>
+                                </Button.Styles>
+                                <Border Classes="b1">
+                                    <TextBlock Classes="Def">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1} | {2}">
+                                                <Binding Path="Client.brand"/>
+                                                <Binding Path="Client.series"/>
+                                                <Binding Path="Maintenance.date"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Border>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </StackPanel>
 </Window>

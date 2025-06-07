@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Reactive;
 using ReactiveUI;
 using Avalonia;
@@ -18,6 +19,7 @@ public class LoginWindowViewModel : ReactiveObject
     private string _errorMessage = "";
     private bool _isLoading;
     private readonly IWindowService _windowService;
+    private static int _user_id;
     public string Username
     {
         get => _username;
@@ -57,9 +59,9 @@ public class LoginWindowViewModel : ReactiveObject
 
                 if (string.IsNullOrEmpty(result.Error))
                 {
-                    TokenStorageService.AuthToken = result.AccessToken;
-                    Console.Write("Вы авторизованы!");
-                    var mainWindow = CreateWindowForRole(UserInfo.UserRole);
+                    TokenStorageService.AuthToken = result.access_token;
+                    _user_id = result.user_info.user_id;
+                    var mainWindow = CreateWindowForRole(result.user_info.user_role);
                     _windowService.ShowWindow(mainWindow);
                     _windowService.CloseWindow(currentWindow);
                 }
@@ -79,12 +81,14 @@ public class LoginWindowViewModel : ReactiveObject
 
     private Window CreateWindowForRole(string role)
     {
+        var maintenance_service = new MaintenancesService(new HttpClient());
         return role switch
         {
-            "master" => new MasterWindow() {DataContext = new MasterWindowViewModel() },
+            "master" => new MasterWindow(_user_id) {DataContext = new MasterWindowViewModel(maintenance_service, _user_id) },
             "manager" => new ManagerWindow() {DataContext = new ManagerWindowViewModel() },
             "admin"  => new AdminWindow() {DataContext = new AdminWindowViewModel() },
-            "storekeeper"  => new StoreWindow() {DataContext = new StoreWindowViewModel() }
+            "storekeeper"  => new StoreWindow() {DataContext = new StoreWindowViewModel() },
+            _ => new MasterWindow(_user_id) {DataContext = new MasterWindowViewModel(maintenance_service,  _user_id) }
         };
     }
 
