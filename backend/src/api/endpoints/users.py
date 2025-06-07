@@ -38,7 +38,8 @@ async def login_user(
         "user_info": {
             "username": user.username,
             "user_id": user.id,
-            "user_role": user.role
+            "user_role": user.role,
+            "first_name": user.first_name,
         }
     }
 
@@ -107,6 +108,17 @@ async def add_user(user_data: UsersSchema, session: SessionDep):
 async def get_all_users(session: SessionDep):
     try:
         result = await session.execute(select(UsersModel))
+        users = result.scalars().all()
+        return users
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
+    
+
+@router.get("/all_masters", response_model=List[UsersSchema], tags=["Все мастера"])
+async def get_all_masters(session: SessionDep):
+    try:
+        result = await session.execute(select(UsersModel).where(UsersModel.role == "master"))
         users = result.scalars().all()
         return users
     except Exception as e:

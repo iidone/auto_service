@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Reactive;
 using ReactiveUI;
@@ -56,9 +57,13 @@ public class LoginWindowViewModel : ReactiveObject
                 ErrorMessage = "";
 
                 var result = await authService.LoginAsync(Username, Password);
-
+                
+                
                 if (string.IsNullOrEmpty(result.Error))
                 {
+                    UserInfoService.UserId = result.user_info.user_id;
+                    UserInfoService.FirstName = result.user_info.first_name;
+                    UserInfoService.Role = result.user_info.user_role;
                     TokenStorageService.AuthToken = result.access_token;
                     _user_id = result.user_info.user_id;
                     var mainWindow = CreateWindowForRole(result.user_info.user_role);
@@ -82,10 +87,11 @@ public class LoginWindowViewModel : ReactiveObject
     private Window CreateWindowForRole(string role)
     {
         var maintenance_service = new MaintenancesService(new HttpClient());
+        var master_service = new MasterService(new HttpClient());
         return role switch
         {
             "master" => new MasterWindow(_user_id) {DataContext = new MasterWindowViewModel(maintenance_service, _user_id) },
-            "manager" => new ManagerWindow() {DataContext = new ManagerWindowViewModel() },
+            "manager" => new ManagerWindow() {DataContext = new ManagerWindowViewModel(master_service) },
             "admin"  => new AdminWindow() {DataContext = new AdminWindowViewModel() },
             "storekeeper"  => new StoreWindow() {DataContext = new StoreWindowViewModel() },
             _ => new MasterWindow(_user_id) {DataContext = new MasterWindowViewModel(maintenance_service,  _user_id) }

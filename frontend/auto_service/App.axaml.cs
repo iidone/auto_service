@@ -63,6 +63,7 @@ namespace Auto_Service
                     services.AddSingleton<TokenStorageService>();
                     services.AddSingleton<AuthService>();
                     services.AddSingleton<MaintenancesService>();
+                    services.AddSingleton<MasterService>();
                     var serviceProvider = services.BuildServiceProvider();
                 });
 
