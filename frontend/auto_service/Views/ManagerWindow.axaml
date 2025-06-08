@@ -43,6 +43,7 @@
             <Button Content="Добавить ТО" />
                     
             <Button Content="Добавить клиента"
+                    Command="{Binding OpenAddClientCommand}"
                     Margin="10,0,0,0"/>
         </StackPanel>
         
@@ -60,6 +61,7 @@
                                 Orientation="Vertical"
                                 Margin="0,0,5,10">
                         <Button Content="Добавить мастера"
+                                Command="{Binding OpenAddMasterCommand}"
                                 Width="150"/>
                                 
                         <Button Content="Экспорт в Excel"
@@ -88,6 +90,11 @@
             </TabItem>
             
             <TabItem Header="Работы сервиса">
+                <TextBlock Text="ТОшки"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </TabItem>
+            <TabItem Header="Клиенты">
                 <TextBlock Text="ТОшки"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>

@@ -10,7 +10,7 @@ namespace Auto_Service.Services;
 public class MasterService
 {
     private readonly HttpClient _client;
-
+    public event Action MasterChanged;
     public MasterService(HttpClient httpClient)
     {
         _client = httpClient;
@@ -40,6 +40,34 @@ public class MasterService
             Console.WriteLine($"Критическая ошибка в GetWorksByMasterId: {ex}");
             Console.WriteLine(ex);
             return new List<MasterModel>();
+        }
+    }
+    
+    public async Task<bool> AddMaster(MasterModel master)
+    {
+        try
+        {
+            var response = await _client.PostAsJsonAsync(
+                "http://127.0.0.1:8000/users/add_user", 
+                new {
+                    role = "master",
+                    username = master.username,
+                    first_name = master.first_name,
+                    last_name = master.last_name,
+                    password = master.password,
+                    contact = master.contact
+                });
+            if (response.IsSuccessStatusCode)
+            {
+                MasterChanged?.Invoke();
+                return true;
+            }
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при добавлении мастера: {ex}");
+            return false;
         }
     }
     

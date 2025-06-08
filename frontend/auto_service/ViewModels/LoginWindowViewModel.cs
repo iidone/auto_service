@@ -10,6 +10,8 @@ using Auto_Service.Models;
 using Auto_Service.Services;
 using Auto_Service.Views;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.VisualTree;
 
 namespace Auto_Service.ViewModels;
 
@@ -86,15 +88,32 @@ public class LoginWindowViewModel : ReactiveObject
 
     private Window CreateWindowForRole(string role)
     {
-        var maintenance_service = new MaintenancesService(new HttpClient());
-        var master_service = new MasterService(new HttpClient());
+        var windowService = new WindowService();
+        var maintenanceService = new MaintenancesService(new HttpClient());
+        var masterService = new MasterService(new HttpClient());
+    
         return role switch
         {
-            "master" => new MasterWindow(_user_id) {DataContext = new MasterWindowViewModel(maintenance_service, _user_id) },
-            "manager" => new ManagerWindow() {DataContext = new ManagerWindowViewModel(master_service) },
-            "admin"  => new AdminWindow() {DataContext = new AdminWindowViewModel() },
-            "storekeeper"  => new StoreWindow() {DataContext = new StoreWindowViewModel() },
-            _ => new MasterWindow(_user_id) {DataContext = new MasterWindowViewModel(maintenance_service,  _user_id) }
+            "master" => new MasterWindow(_user_id) 
+            { 
+                DataContext = new MasterWindowViewModel(maintenanceService, _user_id) 
+            },
+            "manager" => new ManagerWindow() 
+            { 
+                DataContext = new ManagerWindowViewModel(masterService, windowService) 
+            },
+            "admin" => new AdminWindow() 
+            { 
+                DataContext = new AdminWindowViewModel()
+            },
+            "storekeeper" => new StoreWindow() 
+            { 
+                DataContext = new StoreWindowViewModel()
+            },
+            _ => new MasterWindow(_user_id) 
+            { 
+                DataContext = new MasterWindowViewModel(maintenanceService, _user_id) 
+            }
         };
     }
 
