@@ -67,7 +67,7 @@ async def logout_user(
 
 
 
-@router.post("/add_user", response_model=List[UsersSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить пользователя"])
+@router.post("/add_user", response_model=UsersSchema, status_code=status.HTTP_201_CREATED, tags=["Добавить пользователя"])
 async def add_user(user_data: UsersSchema, session: SessionDep):
     try:
         existing_user = await session.execute(

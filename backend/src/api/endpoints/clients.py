@@ -8,7 +8,7 @@ from src.api.dependencies import SessionDep
 
 router = APIRouter(prefix="/clients")
 
-@router.post("/add_client", response_model=List[ClientsSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить клиента"])
+@router.post("/add_client", response_model=ClientsSchema, status_code=status.HTTP_201_CREATED, tags=["Добавить клиента"])
 async def add_client(client_data: ClientsSchema, session: SessionDep):
     try:
         

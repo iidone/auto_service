@@ -15,7 +15,7 @@ from src.schemas.clients import ClientsSchema
 router = APIRouter(prefix="/maintenances")
 
 
-@router.post("/add_maintenance", response_model=List[MaintenancesSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить ТО"])
+@router.post("/add_maintenance", response_model=MaintenancesSchema, status_code=status.HTTP_201_CREATED, tags=["Добавить ТО"])
 async def add_maintenance(maintenance_data: MaintenancesSchema, session: SessionDep):
     try:
 
