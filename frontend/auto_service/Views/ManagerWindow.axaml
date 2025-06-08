@@ -21,7 +21,7 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
         
-        <!-- Стили для кнопок -->
+
         <Style Selector="Button">
             <Setter Property="Background" Value="#333"/>
             <Setter Property="Foreground" Value="White"/>
@@ -36,7 +36,6 @@
     </Window.Styles>
     
     <DockPanel>
-        <!-- Верхняя панель -->
         <StackPanel DockPanel.Dock="Top" 
                     Orientation="Horizontal" 
                     Background="#252525"
@@ -47,7 +46,7 @@
                     Margin="10,0,0,0"/>
         </StackPanel>
         
-        <!-- Основная область -->
+
         <TabControl>
             <TabItem Header="Мастера">
                 <Grid>
@@ -68,7 +67,6 @@
                                 Margin="5,5"/>
                     </StackPanel>
                     
-                    <!-- Список мастеров -->
                     <DataGrid Grid.Row="1"
                                     Margin="10"
                                     ItemsSource="{Binding Masters}"
