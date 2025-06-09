@@ -1,4 +1,6 @@
-﻿using Auto_Service.ViewModels;
+﻿using System.Net.Http;
+using Auto_Service.Services;
+using Auto_Service.ViewModels;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -10,6 +12,9 @@ public partial class AddMaintenanceWindow : Window
     public AddMaintenanceWindow()
     {
         InitializeComponent();
-        DataContext = new AddMaintenanceWindowViewModel();
+        var maintenance_service = new MaintenancesService(new HttpClient());
+        var client_service = new ClientService(new HttpClient());
+        var master_service = new MasterService(new HttpClient());
+        DataContext = new AddMaintenanceWindowViewModel(client_service, master_service, maintenance_service );
     }
 }

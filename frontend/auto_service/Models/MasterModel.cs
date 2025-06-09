@@ -9,5 +9,6 @@ public class MasterModel
     public string contact { get; set; }
     public string username {get; set;}
     public string password { get; set; }
+    public string ShortName => $"{last_name} {first_name?[0]}.";
     
 }

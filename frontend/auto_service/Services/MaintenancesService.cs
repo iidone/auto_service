@@ -11,6 +11,7 @@ namespace Auto_Service.Services
     public class MaintenancesService
     {
         private readonly HttpClient _client;
+        public event Action WorksChanged;
 
         public MaintenancesService(HttpClient httpClient)
         {
@@ -79,6 +80,38 @@ namespace Auto_Service.Services
                 return new List<WorkMasterResponce>();
             }
             
+        }
+
+        public async Task<bool> AddMaintenance(AddMaintenanceRequest request)
+        {
+            try
+            {
+                var responce = await _client.PostAsJsonAsync(
+                    "http://127.0.0.1:8000/maintenances/add_maintenance",
+                    new
+                    {
+                        user_id = request.user_id,
+                        client_id = request.client_id,
+                        description = request.description,
+                        date = request.date,
+                        next_maintenance = request.next_maintenance,
+                        comment = request.comment,
+                        status = request.status,
+                        price = request.price
+                    });
+                if (responce.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("success");
+                    WorksChanged?.Invoke();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Critizal error in AddMaintenance: {ex}");
+                return false;
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
     public ReactiveCommand<Unit, Unit> OpenAddClientCommand { get; }
     public ReactiveCommand<Unit, Unit> ViewAllWorksCommand { get; }
     public ReactiveCommand<Unit, Unit> ViewAllClientsCommand { get; }
+    public ReactiveCommand<Unit, Unit> OpenAddWorkCommand { get; }
     private readonly MasterService _service;
     private readonly MaintenancesService _maintenancesService;
     private readonly ClientService _clientService;
@@ -55,6 +56,7 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
         _clientService = clientService;
         _clientService.ClientsChanged += OnClientsChanged;
         _service.MasterChanged += OnMastersChanged;
+        _maintenancesService.WorksChanged += OnWorksChanged;
         OpenAddMasterCommand = ReactiveCommand.Create(() =>
         {
             var addMasterWindow = new AddMasterWindow();
@@ -66,6 +68,15 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
             var addClientWindow = new AddClientWindow();
             addClientWindow.DataContext = new AddClientWindowViewModel(_clientService, _windowService);
             addClientWindow.Show();
+        });
+        OpenAddWorkCommand = ReactiveCommand.Create(() =>
+        {
+            var _maintenance_service = new MaintenancesService(new HttpClient());
+            var _masterService = new MasterService(new HttpClient());
+            var addMaintenanceWindow = new AddMaintenanceWindow();
+            addMaintenanceWindow.DataContext = new AddMaintenanceWindowViewModel(_clientService, _service,  _maintenancesService);
+            addMaintenanceWindow.Show();
+
         });
         
         ViewAllMastersCommand = ReactiveCommand.CreateFromTask(ViewAllMasters);
@@ -98,11 +109,17 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
     {
         await ViewAllClients();
     }
+
+    private async void OnWorksChanged()
+    {
+        await ViewAllWorks();
+    }
     
     public void Dispose()
     {
         _service.MasterChanged -= OnMastersChanged;
         _clientService.ClientsChanged -= OnClientsChanged;
+        _maintenancesService.WorksChanged -= OnWorksChanged;
     }
 
 
