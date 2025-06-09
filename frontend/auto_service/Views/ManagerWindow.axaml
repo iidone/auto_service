@@ -1,9 +1,104 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Auto_Service.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:controls="using:Avalonia.Controls"
+        mc:Ignorable="d" 
+        d:DesignWidth="800" 
+        d:DesignHeight="450"
         x:Class="Auto_Service.Views.ManagerWindow"
-        Title="ManagerWindow">
-    Welcome to Avalonia!
+        x:DataType="vm:ManagerWindowViewModel"
+        Background="#1B1B1B"
+        Title="Панель менеджера">
+        
+    <Window.Styles>
+        <Style Selector="TextBlock.header">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="Foreground" Value="#D3D3D3"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        
+
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#333"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+        
+        <Style Selector="Button:pointerover">
+            <Setter Property="Background" Value="#444"/>
+        </Style>
+    </Window.Styles>
+    
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" 
+                    Orientation="Horizontal" 
+                    Background="#252525"
+                    Height="50">
+            <Button Content="Добавить ТО" />
+                    
+            <Button Content="Добавить клиента"
+                    Command="{Binding OpenAddClientCommand}"
+                    Margin="10,0,0,0"/>
+        </StackPanel>
+        
+
+        <TabControl>
+            <TabItem Header="Мастера">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <StackPanel Grid.Row="0"
+                                HorizontalAlignment="Right"
+                                Orientation="Vertical"
+                                Margin="0,0,5,10">
+                        <Button Content="Добавить мастера"
+                                Command="{Binding OpenAddMasterCommand}"
+                                Width="150"/>
+                                
+                        <Button Content="Экспорт в Excel"
+                                Width="150"
+                                Margin="5,5"/>
+                    </StackPanel>
+                    
+                    <DataGrid Grid.Row="1"
+                                    Margin="10"
+                                    ItemsSource="{Binding Masters}"
+                                    AutoGenerateColumns="False"
+                                    IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header= "Имя"
+                                                         Binding="{Binding first_name}"
+                                                       Width="*"/>
+                            <DataGridTextColumn Header="Фамилия"
+                                                         Binding = "{Binding last_name}"
+                                                       Width="2*"/>
+                            <DataGridTextColumn Header="Контакт"
+                                                         Binding="{Binding contact}"
+                                                       Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            
+            <TabItem Header="Работы сервиса">
+                <TextBlock Text="ТОшки"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </TabItem>
+            <TabItem Header="Клиенты">
+                <TextBlock Text="ТОшки"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>

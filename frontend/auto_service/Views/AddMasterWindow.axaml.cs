@@ -7,16 +7,14 @@ using Avalonia.Markup.Xaml;
 
 namespace Auto_Service.Views;
 
-public partial class ManagerWindow : Window
+public partial class AddMasterWindow : Window
 {
-    public ManagerWindow()
+    public AddMasterWindow()
     {
-        this.CanResize = false;
-        this.Width = 800;
-        this.Height = 600;
         InitializeComponent();
         var window_service = new WindowService();
         var _service = new MasterService(new HttpClient());
-        DataContext = new ManagerWindowViewModel(_service, window_service);
+        
+        DataContext = new AddMasterWindowViewModel(_service, window_service, this);
     }
 }
