@@ -1,4 +1,5 @@
 from pydantic import BaseModel, ConfigDict
+from typing_extensions import List
 
 
 class MaintenancesSchema(BaseModel):
@@ -11,3 +12,7 @@ class MaintenancesSchema(BaseModel):
     status: str
     price: str
     model_config = ConfigDict(from_attributes=True)
+
+
+class DeleteMaintenanceRequest(BaseModel):
+    ids: List[int] 

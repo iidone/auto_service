@@ -1,9 +1,9 @@
 from typing_extensions import List
 from fastapi import APIRouter, HTTPException, status, Depends, Response
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from src.models.users import UsersModel
-from src.schemas.users import UsersSchema
+from src.schemas.users import DeleteMasterRequest, UsersSchema
 from src.api.dependencies import (
     add_to_blacklist,
     pwd_context, 
@@ -123,3 +123,66 @@ async def get_all_masters(session: SessionDep):
         return users
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
+
+@router.get("/all_managers", response_model=List[UsersSchema], tags=["Все менеджеры"])
+async def get_all_managers(session: SessionDep):
+    try:
+        result = await session.execute(select(UsersModel).where(UsersModel.role == "manager"))
+        users = result.scalars().all()
+        return users
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
+
+@router.delete(
+    "/delete-many",
+    status_code=status.HTTP_200_OK,
+    response_model=dict,
+    tags=["Удалить мастера"]
+)
+async def delete_master(
+    session: SessionDep,
+    request: DeleteMasterRequest,
+):
+    try:
+        if not request.ids:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Список ID не может быть пустым"
+            )
+
+        stmt = select(UsersModel).where(
+            UsersModel.id.in_(request.ids),
+            UsersModel.role == "master"
+        )
+        result = await session.execute(stmt)
+        masters_to_delete = result.scalars().all()
+
+        if not masters_to_delete:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Не найдено мастеров с указанными ID"
+            )
+
+        master_ids = [master.id for master in masters_to_delete]
+
+        await session.execute(
+            delete(UsersModel).where(UsersModel.id.in_(master_ids)))
+        await session.commit()
+
+        return {
+            "message": f"Удалено мастеров: {len(master_ids)}",
+            "deleted_ids": master_ids
+        }
+    
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        await session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка при удалении мастеров: {str(e)}"
+        )
+    
