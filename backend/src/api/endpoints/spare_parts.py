@@ -10,7 +10,7 @@ router = APIRouter(prefix="/spare-parts")
 
 
 
-@router.post("/add_spare_parts", response_model=List[SparePartsSchema], status_code=status.HTTP_201_CREATED, tags=["Добавить запчасть"])
+@router.post("/add_spare_parts", response_model=SparePartsSchema, status_code=status.HTTP_201_CREATED, tags=["Добавить запчасть"])
 async def add_spare_part(spare_parts_data: SparePartsSchema, session: SessionDep):
     try:
         new_spare_part = SparePartsModel(
