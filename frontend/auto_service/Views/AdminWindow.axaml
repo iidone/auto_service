@@ -1,9 +1,146 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:Auto_Service.ViewModels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Auto_Service.Views.AdminWindow"
-        Title="AdminWindow">
-    Welcome to Avalonia!
+        x:DataType="vm:AdminWindowViewModel"
+        Title="Панель администратора"
+        
+        Background="#1B1B1B">
+    
+    <Window.Styles>
+        <Style Selector="TextBlock.Def">
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="Foreground" Value="#D3D3D3"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Border.b1">
+            <Setter Property="Background" Value="#333"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Width" Value="450"/>
+            <Setter Property="Height" Value="70"/>
+        </Style>
+    </Window.Styles>
+
+    <TabControl>
+        <TabItem Header="Все пользователи">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Margin="5,5">
+                    <Button Content="Добавить пользователя"
+
+                            Width="200"/>
+                                
+                    <Button Content="Экспорт в Excel"
+                            Width="200"
+                            Margin="5,5"/>
+                    <Button Content="Обновить"
+                            Command="{Binding LoadUsersCommand}"
+                            Width="200"
+                            Margin="5,5"/>
+                </StackPanel>
+                    
+                <DataGrid Grid.Row="1"
+                          Margin="10"
+                          ItemsSource="{Binding Users}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Имя пользователя"
+                                            Binding="{Binding username}"
+                                            Width="5*"/>
+                        <DataGridTextColumn Header= "Пароль"
+                                            Binding="{Binding password}"
+                                            Width="5*"/>
+                        <DataGridTextColumn Header= "Имя"
+                                            Binding="{Binding first_name}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Фамилия"
+                                            Binding="{Binding last_name}"
+                                            Width="4*"/>
+                        <DataGridTextColumn Header="Роль"
+                                            Binding="{Binding role}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Контакт"
+                                            Binding="{Binding contact}"
+                                            Width="4*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                
+            </Grid>
+        </TabItem>
+            <TabItem Header="Мастера">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Orientation="Vertical"
+                            Margin="0,0,5,10">
+                    <Button Content="Добавить мастера"
+
+                            Width="150"/>
+                                
+                    <Button Content="Экспорт в Excel"
+                            Width="150"
+                            Margin="5,5"/>
+                </StackPanel>
+                    
+                <DataGrid Grid.Row="1"
+                          Margin="10"
+
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Имя"
+
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Фамилия"
+
+                                            Width="2*"/>
+                        <DataGridTextColumn Header="Контакт"
+
+                                            Width="2*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            </TabItem>
+            <TabItem Header="Менеджеры">
+                <TextBlock Text="менеджеры"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            </TabItem>
+            <TabItem Header="Клиенты">
+                <TextBlock Text="Машинки"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+            </TabItem>
+            <TabItem Header="Работы сервиса">
+                <TextBlock Text="ТОшки"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            </TabItem>
+            <TabItem Header="Запчасти">
+                <TextBlock Text="гвозди дюпеля дрель молоток шуруповерты"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            </TabItem>
+            
+            </TabControl>
 </Window>

@@ -91,6 +91,8 @@ public class LoginWindowViewModel : ReactiveObject
         var windowService = new WindowService();
         var maintenanceService = new MaintenancesService(new HttpClient());
         var masterService = new MasterService(new HttpClient());
+        var adminService = new AdminService(new HttpClient());
+
     
         return role switch
         {
@@ -104,7 +106,7 @@ public class LoginWindowViewModel : ReactiveObject
             },
             "admin" => new AdminWindow() 
             { 
-                DataContext = new AdminWindowViewModel()
+                DataContext = new AdminWindowViewModel(adminService)
             },
             "storekeeper" => new StoreWindow() 
             { 
