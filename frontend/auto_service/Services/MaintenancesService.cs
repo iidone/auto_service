@@ -50,5 +50,35 @@ namespace Auto_Service.Services
                 return new List<WorkMasterResponce>();
             }
         }
+
+        public async Task<List<WorkMasterResponce>> GetAllWorks()
+        {
+            try
+            {
+                var url = $"http://127.0.0.1:8000/maintenances/maintenances_with_clients";
+                Console.WriteLine($"Sending responce: {url}");
+                var response = await _client.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error: {errorContent}");
+                    return new List<WorkMasterResponce>();
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Fetched: {content}");
+                
+                var result = await response.Content.ReadFromJsonAsync<List<WorkMasterResponce>>();
+                Debug.WriteLine($"Deserialize: {result?.Count ?? 0} works");
+                return result ?? new List<WorkMasterResponce>();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Critizal error in GeAllWorks: {ex}");
+                Console.WriteLine(ex);
+                return new List<WorkMasterResponce>();
+            }
+            
+        }
     }
 }

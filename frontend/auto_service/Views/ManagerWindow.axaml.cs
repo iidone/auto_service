@@ -11,12 +11,14 @@ public partial class ManagerWindow : Window
 {
     public ManagerWindow()
     {
-        this.CanResize = false;
-        this.Width = 800;
-        this.Height = 600;
+        this.CanResize = true;
+        this.Height = 650;
+        this.Width = 1500;
         InitializeComponent();
-        var window_service = new WindowService();
+        var _client_service = new ClientService(new HttpClient());
+        var _maintenance_service = new MaintenancesService(new HttpClient());
+        var window_service = new WindowService(this);
         var _service = new MasterService(new HttpClient());
-        DataContext = new ManagerWindowViewModel(_service, window_service);
+        DataContext = new ManagerWindowViewModel(_service, window_service,  _maintenance_service,  _client_service);
     }
 }

@@ -68,8 +68,8 @@ public class LoginWindowViewModel : ReactiveObject
                     UserInfoService.Role = result.user_info.user_role;
                     TokenStorageService.AuthToken = result.access_token;
                     _user_id = result.user_info.user_id;
-                    var mainWindow = CreateWindowForRole(result.user_info.user_role);
-                    _windowService.ShowWindow(mainWindow);
+                    var mainWindow = CreateWindowForRole(result.user_info.user_role, currentWindow);
+                    mainWindow.Show();
                     _windowService.CloseWindow(currentWindow);
                 }
                 else
@@ -86,9 +86,10 @@ public class LoginWindowViewModel : ReactiveObject
         });
     }
 
-    private Window CreateWindowForRole(string role)
+    private Window CreateWindowForRole(string role, Window OwnerWindow)
     {
-        var windowService = new WindowService();
+        var clientService = new ClientService(new HttpClient());
+        var windowService = new WindowService(OwnerWindow);
         var maintenanceService = new MaintenancesService(new HttpClient());
         var masterService = new MasterService(new HttpClient());
         var adminService = new AdminService(new HttpClient());
@@ -102,7 +103,7 @@ public class LoginWindowViewModel : ReactiveObject
             },
             "manager" => new ManagerWindow() 
             { 
-                DataContext = new ManagerWindowViewModel(masterService, windowService) 
+                DataContext = new ManagerWindowViewModel(masterService, windowService, maintenanceService, clientService) 
             },
             "admin" => new AdminWindow() 
             { 
