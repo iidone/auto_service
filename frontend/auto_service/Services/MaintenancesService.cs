@@ -11,7 +11,7 @@ namespace Auto_Service.Services
     public class MaintenancesService
     {
         private readonly HttpClient _client;
-        private event Action WorksChanged;
+        public event Action WorksChanged;
 
         public MaintenancesService(HttpClient httpClient)
         {

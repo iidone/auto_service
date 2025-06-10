@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Auto_Service.Models;
 
@@ -69,6 +72,32 @@ public class MasterService
             Console.WriteLine($"Ошибка при добавлении мастера: {ex}");
             return false;
         }
+    }
+
+    public async Task<bool> DeleteMaster(IEnumerable<int> masterIds)
+    {
+        try
+        {
+            var request = new { ids = masterIds };
+        
+            var response = await _client.PostAsJsonAsync("http://127.0.0.1:8000/users/delete-many", request);
+        
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<Dictionary<string, object>>();
+                MasterChanged?.Invoke();
+                return true;
+            }
+        
+            var error = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Error: {error}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"DeleteMasters error: {ex.Message}");
+            return false;
+        }
+        
     }
     
 }

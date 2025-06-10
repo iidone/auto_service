@@ -8,7 +8,7 @@ from src.api.dependencies import SessionDep
 
 router = APIRouter(prefix="/clients")
 
-@router.post("/add_client", response_model=ClientsSchema, status_code=status.HTTP_201_CREATED, tags=["Добавить клиента"])
+@router.post("/add_client", response_model=ClientsSchema, status_code=status.HTTP_201_CREATED, tags=["Клиенты"], summary=["Добавить клиента"])
 async def add_client(client_data: ClientsSchema, session: SessionDep):
     try:
         
@@ -41,7 +41,7 @@ async def add_client(client_data: ClientsSchema, session: SessionDep):
         )
     
 
-@router.get("/all_clients", response_model=List[ClientsSchema], tags=["Все клиенты"])
+@router.get("/all_clients", response_model=List[ClientsSchema], tags=["Клиенты"], summary=["Получить всех клиентов"])
 async def get_all_clients(session: SessionDep):
     try:
         result = await session.execute(select(ClientsModel))

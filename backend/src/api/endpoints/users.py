@@ -17,7 +17,7 @@ from src.api.dependencies import (
 
 router = APIRouter(prefix="/users")
 
-@router.post("/login", tags=["Авторизация"])
+@router.post("/login", tags=["Пользователи"],summary = ["Авторизация"])
 async def login_user(
     session: SessionDep,
     form_data: OAuth2PasswordRequestForm = Depends()
@@ -43,7 +43,7 @@ async def login_user(
         }
     }
 
-@router.post("/logout", tags=["Выход"])
+@router.post("/logout", tags=["Пользователи"], summary=["Выход"])
 async def logout_user(
     session: SessionDep,
     response: Response,
@@ -67,7 +67,7 @@ async def logout_user(
 
 
 
-@router.post("/add_user", response_model=UsersSchema, status_code=status.HTTP_201_CREATED, tags=["Добавить пользователя"])
+@router.post("/add_user", response_model=UsersSchema, status_code=status.HTTP_201_CREATED, tags=["Пользователи"], summary=["Добавить пользователя"])
 async def add_user(user_data: UsersSchema, session: SessionDep):
     try:
         existing_user = await session.execute(
@@ -104,7 +104,7 @@ async def add_user(user_data: UsersSchema, session: SessionDep):
 
 
 
-@router.get("/all_users", response_model=List[UsersSchema], tags=["Все пользователи"])
+@router.get("/all_users", response_model=List[UsersSchema], tags=["Пользователи"], summary=["Получить всех пользователей"])
 async def get_all_users(session: SessionDep):
     try:
         result = await session.execute(select(UsersModel))
@@ -115,7 +115,7 @@ async def get_all_users(session: SessionDep):
     
     
 
-@router.get("/all_masters", response_model=List[UsersSchema], tags=["Все мастера"])
+@router.get("/all_masters", response_model=List[UsersSchema], tags=["Пользователи"], summary=["Получить всех мастеров"])
 async def get_all_masters(session: SessionDep):
     try:
         result = await session.execute(select(UsersModel).where(UsersModel.role == "master"))
@@ -125,7 +125,7 @@ async def get_all_masters(session: SessionDep):
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     
 
-@router.get("/all_managers", response_model=List[UsersSchema], tags=["Все менеджеры"])
+@router.get("/all_managers", response_model=List[UsersSchema], tags=["Пользователи"], summary=["Получить всех менеджеров"])
 async def get_all_managers(session: SessionDep):
     try:
         result = await session.execute(select(UsersModel).where(UsersModel.role == "manager"))
@@ -135,11 +135,12 @@ async def get_all_managers(session: SessionDep):
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     
 
-@router.delete(
+@router.post(
     "/delete-many",
     status_code=status.HTTP_200_OK,
     response_model=dict,
-    tags=["Удалить мастера"]
+    tags=["Пользователи"],
+    summary=["Удалить нескольких пользователей"]
 )
 async def delete_master(
     session: SessionDep,

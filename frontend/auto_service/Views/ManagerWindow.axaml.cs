@@ -17,8 +17,9 @@ public partial class ManagerWindow : Window
         InitializeComponent();
         var _client_service = new ClientService(new HttpClient());
         var _maintenance_service = new MaintenancesService(new HttpClient());
+        var export_service = new ExportService(this);
         var window_service = new WindowService(this);
         var _service = new MasterService(new HttpClient());
-        DataContext = new ManagerWindowViewModel(_service, window_service,  _maintenance_service,  _client_service);
+        DataContext = new ManagerWindowViewModel(_service, window_service,  _maintenance_service,  _client_service, export_service);
     }
 }

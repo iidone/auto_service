@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="using:Avalonia.Controls"
+        xmlns:autoService="clr-namespace:Auto_Service"
         x:Class="Auto_Service.Views.ManagerWindow"
         x:DataType="vm:ManagerWindowViewModel"
         Background="#1B1B1B"
@@ -64,12 +65,16 @@
                                 
                         <Button Content="Экспорт в Excel"
                                 Width="150"
+                                Command="{Binding ExportMastersCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                                 Margin="5,5"/>
                     </StackPanel>
                     
                     <DataGrid Grid.Row="1"
+                                    x:Name="MastersDataGrid"
                                     Margin="10"
                                     ItemsSource="{Binding Masters}"
+                                    SelectedItem="{Binding SelectedMaster}"
                                     AutoGenerateColumns="False"
                                     IsReadOnly="True">
                         <DataGrid.Columns>
@@ -87,6 +92,11 @@
                                                        Width="2*"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button Content="Удалить мастера"
+                            Command="{Binding DeleteMasterCommand}"
+                            Margin="10,0,10,10"
+                            HorizontalAlignment="Left"
+                            Width="150"/>
                 </Grid>
             </TabItem>
             
@@ -140,11 +150,11 @@
                               AutoGenerateColumns="False"
                               IsReadOnly="True">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header= "Фамилия"
-                                                Binding="{Binding last_name}"
+                            <DataGridTextColumn Header= "Имя"
+                                                Binding="{Binding first_name}"
                                                 Width="*"/>
-                            <DataGridTextColumn Header="Имя"
-                                                Binding = "{Binding first_name }"
+                            <DataGridTextColumn Header="Фамилия"
+                                                Binding = "{Binding last_name }"
                                                 Width="2*"/>
                             <DataGridTextColumn Header="Контакт"
                                                 Binding="{Binding contact}"

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Reactive;
@@ -20,15 +22,23 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
     public ReactiveCommand<Unit, Unit> ViewAllWorksCommand { get; }
     public ReactiveCommand<Unit, Unit> ViewAllClientsCommand { get; }
     public ReactiveCommand<Unit, Unit> OpenAddWorkCommand { get; }
+    public ReactiveCommand<Window, Unit> ExportMastersCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeleteMasterCommand { get; }
+    
     private readonly MasterService _service;
     private readonly MaintenancesService _maintenancesService;
+    private MasterModel _selectedMaster;
     private readonly ClientService _clientService;
+    private readonly IExportService _exportService;
     private IWindowService _windowService;
     private ObservableCollection<MasterModel> _masters = new();
     private ObservableCollection<WorkMasterResponce> _works = new();
     private ObservableCollection<ClientModel> _clients = new();
-    
-    
+    public MasterModel SelectedMaster
+    {
+        get => _selectedMaster;
+        set => this.RaiseAndSetIfChanged(ref _selectedMaster, value);
+    }
     public ObservableCollection<MasterModel> Masters
     {
         get => _masters;
@@ -48,10 +58,11 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
     }
     
     
-    public ManagerWindowViewModel(MasterService service,  IWindowService windowService,  MaintenancesService maintenancesService, ClientService clientService)
+    public ManagerWindowViewModel(MasterService service,  IWindowService windowService,  MaintenancesService maintenancesService, ClientService clientService, IExportService exportService)
     {
         _maintenancesService = maintenancesService;
         _service = service;
+        _exportService = exportService;
         _windowService = windowService;
         _clientService = clientService;
         _clientService.ClientsChanged += OnClientsChanged;
@@ -76,12 +87,15 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
             var addMaintenanceWindow = new AddMaintenanceWindow();
             addMaintenanceWindow.DataContext = new AddMaintenanceWindowViewModel(_clientService, _service,  _maintenancesService);
             addMaintenanceWindow.Show();
-
         });
-        
+
+        ExportMastersCommand = ReactiveCommand.CreateFromTask<Window>(ExportExcel);
         ViewAllMastersCommand = ReactiveCommand.CreateFromTask(ViewAllMasters);
         ViewAllWorksCommand = ReactiveCommand.CreateFromTask(ViewAllWorks);
         ViewAllClientsCommand = ReactiveCommand.CreateFromTask(ViewAllClients);
+        
+        DeleteMasterCommand = ReactiveCommand.CreateFromTask(DeleteSelectedMaster, 
+            this.WhenAnyValue(x => x.SelectedMaster).Select(m => m != null));
         LoadInitialData();
     }
     
@@ -195,5 +209,57 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
             throw;
         }
     }
-    
+
+    private async Task ExportExcel(Window currentWindow)
+    {
+        try 
+        {
+            
+            var dataGrid = currentWindow.FindControl<DataGrid>("MastersDataGrid");
+        
+            if (dataGrid == null)
+            {
+                Console.WriteLine("DataGrid не найден!");
+                return;
+            }
+
+            var itemSource = dataGrid.ItemsSource as IEnumerable;
+            var itemsToExport = new List<object>();
+            foreach (var item in itemSource)
+            {
+                itemsToExport.Add(item);
+            }
+
+            var filePath = await _exportService.GetExportFilePathAsync("masters_export.xlsx");
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                _exportService.ExportToExcel(
+                    data: itemsToExport, 
+                    filePath : filePath,
+                    excludedFields: new List<string> { "username", "password" });
+                Console.WriteLine("Данные успешно экспортированы!");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка экспорта: {ex.Message}");
+        }
+    }
+    private async Task DeleteSelectedMaster()
+    {
+        try
+        {
+            var masterId = SelectedMaster.id;
+            var isSuccess = await _service.DeleteMaster(new[] { SelectedMaster.id });
+            if (isSuccess)
+            {
+                Console.WriteLine("Master is deleted");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }

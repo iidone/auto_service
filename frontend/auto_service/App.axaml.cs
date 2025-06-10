@@ -48,6 +48,7 @@ namespace Auto_Service
             
             var services = new ServiceCollection();
             services.AddSingleton<IWindowService, WindowService>();
+            services.AddSingleton<IExportService, ExportService>();
             Services = services.BuildServiceProvider();
 
             builder.StartWithClassicDesktopLifetime(args);   

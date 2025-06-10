@@ -88,7 +88,6 @@ public class LoginWindowViewModel : ReactiveObject
 
     private Window CreateWindowForRole(string role, Window OwnerWindow)
     {
-        var clientService = new ClientService(new HttpClient());
         var windowService = new WindowService(OwnerWindow);
         var maintenanceService = new MaintenancesService(new HttpClient());
         var userService = new UserService(new HttpClient());
@@ -96,37 +95,52 @@ public class LoginWindowViewModel : ReactiveObject
         var managerService = new ManagerService(new HttpClient());
         var clientService = new ClientService(new HttpClient());
         var sparePartsService = new SparePartsService(new HttpClient());
-        
-        return role switch
+
+        switch (role)
         {
-            "master" => new MasterWindow(_user_id) 
-            { 
-                DataContext = new MasterWindowViewModel(maintenanceService, _user_id) 
-            },
-            "manager" => new ManagerWindow() 
-            { 
-                DataContext = new ManagerWindowViewModel(masterService, windowService, maintenanceService, clientService) 
-            },
-            "admin" => new AdminWindow() 
-            { 
-                DataContext = new AdminWindowViewModel(
-                    masterService,
-                    userService,
-                    managerService,
-                    clientService,
-                    sparePartsService,
-                    maintenanceService
+            case "master":
+                return new MasterWindow(_user_id) 
+                { 
+                    DataContext = new MasterWindowViewModel(maintenanceService, _user_id) 
+                };
+        
+            case "manager":
+                var managerWindow = new ManagerWindow();
+                var exportService = new ExportService(managerWindow);
+                managerWindow.DataContext = new ManagerWindowViewModel(
+                    masterService, 
+                    windowService, 
+                    maintenanceService, 
+                    clientService, 
+                    exportService
+                );
+                return managerWindow;
+        
+            case "admin":
+                return new AdminWindow() 
+                { 
+                    DataContext = new AdminWindowViewModel(
+                        masterService,
+                        userService,
+                        managerService,
+                        clientService,
+                        sparePartsService,
+                        maintenanceService
                     )
-            },
-            "storekeeper" => new StoreWindow() 
-            { 
-                DataContext = new StoreWindowViewModel()
-            },
-            _ => new MasterWindow(_user_id) 
-            { 
-                DataContext = new MasterWindowViewModel(maintenanceService, _user_id) 
-            }
-        };
+                };
+        
+            case "storekeeper":
+                return new StoreWindow() 
+                { 
+                    DataContext = new StoreWindowViewModel(sparePartsService)
+                };
+        
+            default:
+                return new MasterWindow(_user_id) 
+                { 
+                    DataContext = new MasterWindowViewModel(maintenanceService, _user_id) 
+                };
+        }
     }
 
 }

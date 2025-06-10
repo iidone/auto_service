@@ -10,7 +10,7 @@ router = APIRouter(prefix="/spare-parts")
 
 
 
-@router.post("/add_spare_parts", response_model=SparePartsSchema, status_code=status.HTTP_201_CREATED, tags=["Добавить запчасть"])
+@router.post("/add_spare_parts", response_model=SparePartsSchema, status_code=status.HTTP_201_CREATED, tags=["Запчасти"], summary = ["Добавить новую запчасть"])
 async def add_spare_part(spare_parts_data: SparePartsSchema, session: SessionDep):
     try:
         new_spare_part = SparePartsModel(
@@ -38,11 +38,12 @@ async def add_spare_part(spare_parts_data: SparePartsSchema, session: SessionDep
 
 
 
-@router.delete(
+@router.post(
     "/delete-many",
     status_code=status.HTTP_200_OK,
     response_model=dict,
-    tags=["Удаление запчастей"]
+    tags=["Запчасти"],
+    summary = ["Удалить несколько запчастей"]
 )
 async def delete_spare_parts(
     request: DeleteSparePartsRequest,
@@ -83,7 +84,7 @@ async def delete_spare_parts(
         )
     
 
-@router.get("/all_spare_parts", response_model=List[SparePartsSchema], tags=["Все запчасти"])
+@router.get("/all_spare_parts", response_model=List[SparePartsSchema], tags=["Запчасти"], summary = ["Получить все запчасти"])
 async def get_all_spare_parts(session: SessionDep):
     try:
         result = await session.execute(select(SparePartsModel))

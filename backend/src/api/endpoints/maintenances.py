@@ -15,7 +15,7 @@ from src.schemas.clients import ClientsSchema
 router = APIRouter(prefix="/maintenances")
 
 
-@router.post("/add_maintenance", response_model=MaintenancesSchema, status_code=status.HTTP_201_CREATED, tags=["Добавить ТО"])
+@router.post("/add_maintenance", response_model=MaintenancesSchema, status_code=status.HTTP_201_CREATED, tags=["Работы"], summary=["добавить ТО"])
 async def add_maintenance(maintenance_data: MaintenancesSchema, session: SessionDep):
     try:
 
@@ -46,7 +46,7 @@ async def add_maintenance(maintenance_data: MaintenancesSchema, session: Session
 
 
 
-@router.get("/all_maintenances", response_model=List[MaintenancesSchema], tags=["Все ТО"])
+@router.get("/all_maintenances", response_model=List[MaintenancesSchema], tags=["Работы"], summary=["Получить все работы"])
 async def get_all_maintenances(session: SessionDep):
     try:
         result = await session.execute(select(MaintenancesModel))
@@ -64,7 +64,8 @@ class MaintenanceWithClient(BaseModel):
 
 @router.get("/maintenances_with_clients", 
            response_model=List[MaintenanceWithClient],
-           tags=["Все ТО с информацией о клиентах"])
+           tags=["Работы"],
+           summary=["Получить все работы с клиентами"])
 async def get_maintenances_with_clients(session: SessionDep):
     try:
         query = select(MaintenancesModel, ClientsModel).\
@@ -97,7 +98,8 @@ class MaintenanceWithClientResponse(BaseModel):
 
 @router.get("/by_master/{master_id}",
            response_model=List[MaintenanceWithClientResponse],
-           tags=["ТО мастера с клиентами"])
+           tags=["Работы"],
+           summary=["Получить все работы по мастеру"])
 async def get_maintenances_by_master(
     session: SessionDep,
     master_id: int = Path(..., title="ID мастера"),
@@ -137,12 +139,12 @@ async def get_maintenances_by_master(
         )
     
 
-@router.delete(
+@router.post(
     "/delete-many",
     status_code=status.HTTP_200_OK,
     response_model=dict,
-    tags=["Удалить ТО"]
-)
+    tags=["Работы"],
+    summary=["Удалить несколько работ"])
 async def delete_maintenance(
     session: SessionDep,
     request: DeleteMaintenanceRequest,
