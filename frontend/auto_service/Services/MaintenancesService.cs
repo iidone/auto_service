@@ -11,6 +11,7 @@ namespace Auto_Service.Services
     public class MaintenancesService
     {
         private readonly HttpClient _client;
+        private event Action WorksChanged;
 
         public MaintenancesService(HttpClient httpClient)
         {
@@ -20,12 +21,12 @@ namespace Auto_Service.Services
         public async Task<List<WorkMasterResponce>> GetWorksByMasterId(int masterId)
         {
             Debug.WriteLine($"Начало GetWorksByMasterId для masterId: {masterId}");
-            
+
             try
             {
                 var url = $"http://127.0.0.1:8000/maintenances/by_master/{masterId}";
                 Console.WriteLine($"Отправка запроса на: {url}");
-                
+
                 var response = await _client.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
@@ -50,31 +51,68 @@ namespace Auto_Service.Services
                 return new List<WorkMasterResponce>();
             }
         }
-        
-        public async Task<List<MaintenancesModel>> GetAllMaintenances()
+
+        public async Task<List<WorkMasterResponce>> GetAllWorks()
         {
             try
             {
-                var url = "http://127.0.0.1:8000/maintenances/all_maintenances";
+                var url = $"http://127.0.0.1:8000/maintenances/maintenances_with_clients";
+                Console.WriteLine($"Sending responce: {url}");
                 var response = await _client.GetAsync(url);
-
                 if (!response.IsSuccessStatusCode)
-                {   
-                    var error = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(error);
-                    return new List<MaintenancesModel>();
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error: {errorContent}");
+                    return new List<WorkMasterResponce>();
                 }
-            
+
                 var content = await response.Content.ReadAsStringAsync();
-                var result = await response.Content.ReadFromJsonAsync<List<MaintenancesModel>>();
-                return result ??  new List<MaintenancesModel>();
+                Console.WriteLine($"Fetched: {content}");
+
+                var result = await response.Content.ReadFromJsonAsync<List<WorkMasterResponce>>();
+                Debug.WriteLine($"Deserialize: {result?.Count ?? 0} works");
+                return result ?? new List<WorkMasterResponce>();
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Критическая ошибка: {ex}");
+                Console.WriteLine($"Critizal error in GeAllWorks: {ex}");
                 Console.WriteLine(ex);
-                return new List<MaintenancesModel>();
+                return new List<WorkMasterResponce>();
+            }
+
+        }
+
+        public async Task<bool> AddMaintenance(AddMaintenanceRequest request)
+        {
+            try
+            {
+                var responce = await _client.PostAsJsonAsync(
+                    "http://127.0.0.1:8000/maintenances/add_maintenance",
+                    new
+                    {
+                        user_id = request.user_id,
+                        client_id = request.client_id,
+                        description = request.description,
+                        date = request.date,
+                        next_maintenance = request.next_maintenance,
+                        comment = request.comment,
+                        status = request.status,
+                        price = request.price
+                    });
+                if (responce.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("success");
+                    WorksChanged?.Invoke();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Critizal error in AddMaintenance: {ex}");
+                return false;
             }
         }
     }

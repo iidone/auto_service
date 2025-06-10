@@ -12,9 +12,8 @@ public partial class AddClientWindow : Window
     public AddClientWindow()
     {
         InitializeComponent();
-        var window_service = new WindowService();
-        var _service = new ClientService(new HttpClient());
-        
-        DataContext = new AddClientWindowViewModel(_service, window_service);
+        var windowService = new WindowService(this);
+        var service = new ClientService(new HttpClient());
+        DataContext = new AddClientWindowViewModel(service, windowService);
     }
 }

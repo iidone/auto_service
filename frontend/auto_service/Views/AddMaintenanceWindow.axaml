@@ -1,0 +1,82 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Auto_Service.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="Auto_Service.Views.AddMaintenanceWindow"
+        x:DataType="vm:AddMaintenanceWindowViewModel"
+        Width="500"
+        SizeToContent="Height"
+        Title="Добавление ТО"
+        Background="#1B1B1B"
+        WindowStartupLocation="CenterOwner">
+
+    <ScrollViewer Margin="10">
+        <StackPanel Spacing="15">
+            <StackPanel>
+                <TextBlock Text="Клиент:" FontWeight="Bold"/>
+                <ComboBox ItemsSource="{Binding Clients}"
+                          SelectedItem="{Binding SelectedClient}"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ShortName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Мастер:" FontWeight="Bold"/>
+                <ComboBox ItemsSource="{Binding Masters}"
+                          SelectedItem="{Binding SelectedMaster}"
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ShortName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Описание работ:" FontWeight="Bold"/>
+                <TextBox Text="{Binding WorkDescription}" 
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Height="100"/>
+            </StackPanel>
+            
+            <Grid ColumnDefinitions="*,*" Margin="0,10">
+                <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                    <TextBlock Text="Дата ТО:" FontWeight="Bold"/>
+                    <TextBox Text="{Binding MaintenanceDate}" 
+                             Watermark="дд.мм.гггг"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                    <TextBlock Text="Следующее ТО:" FontWeight="Bold"/>
+                    <TextBox Text="{Binding NextMaintenanceDate}" 
+                             Watermark="дд.мм.гггг"/>
+                </StackPanel>
+            </Grid>
+            
+            <StackPanel>
+                <TextBlock Text="Комментарий:" FontWeight="Bold"/>
+                <TextBox Text="{Binding Comment}" 
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         Height="60"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" 
+                       HorizontalAlignment="Center" 
+                       Spacing="10" 
+                       Margin="0,20">
+                <Button Content="Сохранить" 
+                        Command="{Binding SaveCommand}" 
+                        Width="100"
+                        Classes="Primary"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

@@ -25,7 +25,7 @@ public class AddMasterWindowViewModel : ReactiveObject
     private readonly IWindowService _windowService;
     private readonly Window _currentWindow;
     
-    public MasterModel NewMaster { get; } = new MasterModel 
+    public MasterModel NewMaster { get; } = new MasterModel
     { 
         role = "master" 
     };
@@ -69,11 +69,11 @@ public class AddMasterWindowViewModel : ReactiveObject
     
     public ReactiveCommand<Unit, Unit> SaveCommand { get; }
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
-    public AddMasterWindowViewModel(MasterService masterService, IWindowService windowService, Window currentWindow)
+    public AddMasterWindowViewModel(MasterService masterService, IWindowService window_service, Window currentWindow)
     {
         _service = masterService;
-        _windowService = windowService;
         _currentWindow = currentWindow;
+        _windowService = window_service;
         
         
         SaveCommand = ReactiveCommand.CreateFromTask(async () =>

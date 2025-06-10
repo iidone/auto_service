@@ -16,7 +16,7 @@ public partial class LoginWindow : Window
         this.Width = 800;
         this.Height = 600;
         InitializeComponent();
-        var windowService = new WindowService();
+        var windowService = new WindowService(this);
         var authService = new AuthService(new HttpClient());
         DataContext = new LoginWindowViewModel(authService, windowService);
     }

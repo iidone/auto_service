@@ -12,7 +12,7 @@ public partial class AddMasterWindow : Window
     public AddMasterWindow()
     {
         InitializeComponent();
-        var window_service = new WindowService();
+        var window_service = new WindowService(this);
         var _service = new MasterService(new HttpClient());
         
         DataContext = new AddMasterWindowViewModel(_service, window_service, this);

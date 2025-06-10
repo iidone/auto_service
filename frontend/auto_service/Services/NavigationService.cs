@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 
@@ -13,11 +14,11 @@ public interface IWindowService
 
 public class WindowService : IWindowService
 {
-    private Window _currentWindow;
+    private Window _ownerWindow;
     
-    public void SetCurrentWindow(Window window)
+    public WindowService(Window ownerWindow)
     {
-        _currentWindow = window;
+        _ownerWindow = ownerWindow ?? throw new ArgumentNullException(nameof(ownerWindow));
     }
     
 
