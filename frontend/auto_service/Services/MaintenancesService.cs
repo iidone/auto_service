@@ -50,5 +50,32 @@ namespace Auto_Service.Services
                 return new List<WorkMasterResponce>();
             }
         }
+        
+        public async Task<List<MaintenancesModel>> GetAllMaintenances()
+        {
+            try
+            {
+                var url = "http://127.0.0.1:8000/maintenances/all_maintenances";
+                var response = await _client.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {   
+                    var error = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(error);
+                    return new List<MaintenancesModel>();
+                }
+            
+                var content = await response.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadFromJsonAsync<List<MaintenancesModel>>();
+                return result ??  new List<MaintenancesModel>();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Критическая ошибка: {ex}");
+                Console.WriteLine(ex);
+                return new List<MaintenancesModel>();
+            }
+        }
     }
 }

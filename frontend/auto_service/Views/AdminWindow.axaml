@@ -61,7 +61,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header= "Имя пользователя"
                                             Binding="{Binding username}"
-                                            Width="5*"/>
+                                            Width="3*"/>
                         <DataGridTextColumn Header= "Пароль"
                                             Binding="{Binding password}"
                                             Width="5*"/>
@@ -91,55 +91,271 @@
                     
                 <StackPanel Grid.Row="0"
                             HorizontalAlignment="Right"
-                            Orientation="Vertical"
-                            Margin="0,0,5,10">
+                            Orientation="Horizontal"
+                            Margin="5,5">
                     <Button Content="Добавить мастера"
 
-                            Width="150"/>
+                            Width="200"/>
                                 
                     <Button Content="Экспорт в Excel"
-                            Width="150"
+                            Width="200"
+                            Margin="5,5"/>
+                    <Button Content="Обновить"
+                            Command="{Binding LoadMastersCommand}"
+                            Width="200"
                             Margin="5,5"/>
                 </StackPanel>
                     
                 <DataGrid Grid.Row="1"
                           Margin="10"
-
+                          ItemsSource="{Binding Masters}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True">
                     <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Имя пользователя"
+                                            Binding="{Binding username}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header= "Пароль"
+                                            Binding="{Binding password}"
+                                            Width="5*"/>
                         <DataGridTextColumn Header= "Имя"
-
-                                            Width="*"/>
+                                            Binding="{Binding first_name}"
+                                            Width="3*"/>
                         <DataGridTextColumn Header="Фамилия"
-
-                                            Width="2*"/>
+                                            Binding="{Binding last_name}"
+                                            Width="4*"/>
+                        <DataGridTextColumn Header="Роль"
+                                            Binding="{Binding role}"
+                                            Width="3*"/>
                         <DataGridTextColumn Header="Контакт"
-
-                                            Width="2*"/>
+                                            Binding="{Binding contact}"
+                                            Width="4*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
             </TabItem>
             <TabItem Header="Менеджеры">
-                <TextBlock Text="менеджеры"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Margin="5,5">
+                    <Button Content="Добавить менеджера"
+
+                            Width="200"/>
+                                
+                    <Button Content="Экспорт в Excel"
+                            Width="200"
+                            Margin="5,5"/>
+                    <Button Content="Обновить"
+                            Command="{Binding LoadManagersCommand}"
+                            Width="200"
+                            Margin="5,5"/>
+                </StackPanel>
+                    
+                <DataGrid Grid.Row="1"
+                          Margin="10"
+                          ItemsSource="{Binding Managers}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Имя пользователя"
+                                            Binding="{Binding username}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header= "Пароль"
+                                            Binding="{Binding password}"
+                                            Width="5*"/>
+                        <DataGridTextColumn Header= "Имя"
+                                            Binding="{Binding first_name}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Фамилия"
+                                            Binding="{Binding last_name}"
+                                            Width="4*"/>
+                        <DataGridTextColumn Header="Роль"
+                                            Binding="{Binding role}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Контакт"
+                                            Binding="{Binding contact}"
+                                            Width="4*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
             </TabItem>
             <TabItem Header="Клиенты">
-                <TextBlock Text="Машинки"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Margin="5,5">
+                    <Button Content="Добавить клиента"
+
+                            Width="200"/>
+                                
+                    <Button Content="Экспорт в Excel"
+                            Width="200"
+                            Margin="5,5"/>
+                    <Button Content="Обновить"
+                            Command="{Binding LoadClientsCommand}"
+                            Width="200"
+                            Margin="5,5"/>
+                </StackPanel>
+                    
+                <DataGrid Grid.Row="1"
+                          Margin="10"
+                          ItemsSource="{Binding Clients}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Имя"
+                                            Binding="{Binding first_name}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header= "Фамилия"
+                                            Binding="{Binding last_name}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header= "Контакт"
+                                            Binding="{Binding contact}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Марка"
+                                            Binding="{Binding brand}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Серия"
+                                            Binding="{Binding series}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Пробег"
+                                            Binding="{Binding mileage}"
+                                            Width="2*"/>
+                        <DataGridTextColumn Header="Год"
+                                            Binding="{Binding age}"
+                                            Width="2*"/>
+                        <DataGridTextColumn Header="VIN"
+                                            Binding="{Binding vin}"
+                                            Width="4*"/>
+                        <DataGridTextColumn Header="Последнее посещение"
+                                            Binding="{Binding last_maintenance}"
+                                            Width="4*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
             </TabItem>
             <TabItem Header="Работы сервиса">
-                <TextBlock Text="ТОшки"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Margin="5,5">
+                    <Button Content="Добавить ТО"
+
+                            Width="200"/>
+                                
+                    <Button Content="Экспорт в Excel"
+                            Width="200"
+                            Margin="5,5"/>
+                    <Button Content="Обновить"
+                            Command="{Binding LoadMaintenancesCommand}"
+                            Width="200"
+                            Margin="5,5"/>
+                </StackPanel>
+                    
+                <DataGrid Grid.Row="1"
+                          Margin="10"
+                          ItemsSource="{Binding Maintenances}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Мастер"
+                                            Binding="{Binding user_id}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header= "Клиент"
+                                            Binding="{Binding client_id}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header= "Описание"
+                                            Binding="{Binding description}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Дата"
+                                            Binding="{Binding date}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Следующее ТО"
+                                            Binding="{Binding next_maintenance}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Комментарий"
+                                            Binding="{Binding comment}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Статус"
+                                            Binding="{Binding status}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Цена"
+                                            Binding="{Binding price}"
+                                            Width="3*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
             </TabItem>
             <TabItem Header="Запчасти">
-                <TextBlock Text="гвозди дюпеля дрель молоток шуруповерты"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Margin="5,5">
+                    <Button Content="Добавить запчасть"
+
+                            Width="200"/>
+                                
+                    <Button Content="Экспорт в Excel"
+                            Width="200"
+                            Margin="5,5"/>
+                    <Button Content="Обновить"
+                            Command="{Binding LoadSparePartsCommand}"
+                            Width="200"
+                            Margin="5,5"/>
+                </StackPanel>
+                    
+                <DataGrid Grid.Row="1"
+                          Margin="10"
+                          ItemsSource="{Binding SpareParts}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Название"
+                                            Binding="{Binding title}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header= "Категория"
+                                            Binding="{Binding category}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header= "Артикль"
+                                            Binding="{Binding article}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Аналог"
+                                            Binding="{Binding analog}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Поставщик"
+                                            Binding="{Binding supplier}"
+                                            Width="3*"/>
+                        <DataGridTextColumn Header="Цена"
+                                            Binding="{Binding price}"
+                                            Width="3*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
             </TabItem>
             
             </TabControl>

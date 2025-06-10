@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -47,4 +48,21 @@ public class ClientService
         }
     }
     
+    public async Task<List<ClientModel>> GetAllClients()
+    {
+        try
+        {
+            var response = await _client.GetAsync("http://127.0.0.1:8000/clients/all_clients");
+            if (!response.IsSuccessStatusCode)
+            {
+                return new List<ClientModel>();
+            }
+            return await response.Content.ReadFromJsonAsync<List<ClientModel>>() ?? new List<ClientModel>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при загрузке клиентов: {ex}");
+            return new List<ClientModel>();
+        }
+    }
 }
