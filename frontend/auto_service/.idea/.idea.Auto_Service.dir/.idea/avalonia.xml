@@ -5,6 +5,9 @@
       <map>
         <entry key="App.axaml" value="Auto_Service.csproj" />
         <entry key="ViewModels/ManagerWindowViewModel.axaml" value="Auto_Service.csproj" />
+        <entry key="Views/AddClientWindow.axaml" value="Auto_Service.csproj" />
+        <entry key="Views/AddMaintenanceWindow.axaml" value="Auto_Service.csproj" />
+        <entry key="Views/AddMasterWindow.axaml" value="Auto_Service.csproj" />
         <entry key="Views/AdminWindow.axaml" value="Auto_Service.csproj" />
         <entry key="Views/DetailWindow.axaml" value="Auto_Service.csproj" />
         <entry key="Views/LoginWindow.axaml" value="Auto_Service.csproj" />

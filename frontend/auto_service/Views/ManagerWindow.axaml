@@ -4,9 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="using:Avalonia.Controls"
-        mc:Ignorable="d" 
-        d:DesignWidth="800" 
-        d:DesignHeight="450"
         x:Class="Auto_Service.Views.ManagerWindow"
         x:DataType="vm:ManagerWindowViewModel"
         Background="#1B1B1B"
@@ -40,7 +37,8 @@
                     Orientation="Horizontal" 
                     Background="#252525"
                     Height="50">
-            <Button Content="Добавить ТО" />
+            <Button Content="Добавить ТО"
+                    Command="{Binding OpenAddWorkCommand }"/>
                     
             <Button Content="Добавить клиента"
                     Command="{Binding OpenAddClientCommand}"
@@ -75,9 +73,12 @@
                                     AutoGenerateColumns="False"
                                     IsReadOnly="True">
                         <DataGrid.Columns>
+                            <DataGridTextColumn Header= "Id"
+                                                Binding="{Binding id}"
+                                                Width="*"/>
                             <DataGridTextColumn Header= "Имя"
-                                                         Binding="{Binding first_name}"
-                                                       Width="*"/>
+                                                Binding="{Binding first_name}"
+                                                Width="*"/>
                             <DataGridTextColumn Header="Фамилия"
                                                          Binding = "{Binding last_name}"
                                                        Width="2*"/>
@@ -90,14 +91,88 @@
             </TabItem>
             
             <TabItem Header="Работы сервиса">
-                <TextBlock Text="ТОшки"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                 <Grid>
+                    <DataGrid Grid.Row="1"
+                              Margin="10"
+                              ItemsSource="{Binding Works}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header= "Id мастера"
+                                                Binding="{Binding Maintenance.user_id}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Дата поступления"
+                                                Binding = "{Binding Maintenance.date }"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Фамилия клиента"
+                                                Binding="{Binding Client.last_name}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Имя клиента"
+                                                Binding="{Binding Client.first_name}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Контакт клиента"
+                                                Binding="{Binding Client.contact}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Марка машины"
+                                                Binding="{Binding Client.brand}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Модель машины"
+                                                Binding="{Binding Client.series}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Номер машины"
+                                                Binding="{Binding Client.number}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Статус"
+                                                Binding="{Binding Maintenance.status}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Цена ремонта"
+                                                Binding="{Binding Maintenance.price}"
+                                                Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </TabItem>
             <TabItem Header="Клиенты">
-                <TextBlock Text="ТОшки"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                <Grid>
+                    <DataGrid Grid.Row="1"
+                              Margin="10"
+                              ItemsSource="{Binding Clients}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header= "Фамилия"
+                                                Binding="{Binding last_name}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Имя"
+                                                Binding = "{Binding first_name }"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Контакт"
+                                                Binding="{Binding contact}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Марка машины"
+                                                Binding="{Binding brand}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Модель машины"
+                                                Binding="{Binding series}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Номер Машины"
+                                                Binding="{Binding number}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Пробег"
+                                                Binding="{Binding mileage}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Год выпуска"
+                                                Binding="{Binding age}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="VIN"
+                                                Binding="{Binding vin}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="Последнее ТО"
+                                                Binding="{Binding last_maintenance}"
+                                                Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </TabItem>
         </TabControl>
     </DockPanel>

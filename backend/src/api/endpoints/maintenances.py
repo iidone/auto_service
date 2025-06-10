@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from typing_extensions import List
 from fastapi import APIRouter, HTTPException, Path, status, Depends, Response
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from src.models.maintenances import MaintenancesModel
-from src.schemas.maintenances import MaintenancesSchema
+from src.schemas.maintenances import DeleteMaintenanceRequest, MaintenancesSchema
 from src.api.dependencies import (
     SessionDep,
 )
@@ -134,4 +134,50 @@ async def get_maintenances_by_master(
         raise HTTPException(
             status_code=500,
             detail=f"Database error: {str(e)}"
+        )
+    
+
+@router.delete(
+    "/delete-many",
+    status_code=status.HTTP_200_OK,
+    response_model=dict,
+    tags=["Удалить ТО"]
+)
+async def delete_maintenance(
+    session: SessionDep,
+    request: DeleteMaintenanceRequest,
+    ):
+    try:
+        if not request.ids:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Список ID не может быть пустым"
+            )
+
+        result = await session.execute(
+            select(MaintenancesModel.id).where(MaintenancesModel.id.in_(request.ids)))
+        existing_ids = result.scalars().all()
+
+        if not existing_ids:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Не найдено ТО с указанными ID"
+            )
+
+        await session.execute(
+            delete(MaintenancesModel).where(MaintenancesModel.id.in_(existing_ids)))
+        await session.commit()
+
+        return {
+            "message": f"Успешно удалено ТО: {len(existing_ids)}",
+            "deleted_ids": existing_ids
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        await session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка при удалении ТО: {str(e)}"
         )

@@ -14,6 +14,7 @@ using Auto_Service.ViewModels;
 using ReactiveUI;
 using Splat;
 using Microsoft.Extensions.DependencyInjection;
+using Avalonia.Controls.Primitives;
 
 namespace Auto_Service
 {
@@ -64,6 +65,7 @@ namespace Auto_Service
                     services.AddSingleton<AuthService>();
                     services.AddSingleton<MaintenancesService>();
                     services.AddSingleton<MasterService>();
+                    services.AddSingleton<ClientService>();
                     var serviceProvider = services.BuildServiceProvider();
                 });
 

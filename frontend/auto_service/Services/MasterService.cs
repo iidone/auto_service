@@ -24,7 +24,7 @@ public class MasterService
             var response = await _client.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
-            {
+            {   
                 var error = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(error);
                 return new List<MasterModel>();
