@@ -135,8 +135,6 @@ async def get_all_managers(session: SessionDep):
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     
 
-<<<<<<< HEAD
-=======
 @router.delete(
     "/delete-many",
     status_code=status.HTTP_200_OK,
@@ -188,4 +186,3 @@ async def delete_master(
             detail=f"Ошибка при удалении мастеров: {str(e)}"
         )
     
->>>>>>> 2f7d5076c98bd714ba2eb1e55be0564ab0cb18fd
