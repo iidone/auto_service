@@ -123,3 +123,15 @@ async def get_all_masters(session: SessionDep):
         return users
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
+
+@router.get("/all_managers", response_model=List[UsersSchema], tags=["Все менеджеры"])
+async def get_all_managers(session: SessionDep):
+    try:
+        result = await session.execute(select(UsersModel).where(UsersModel.role == "manager"))
+        users = result.scalars().all()
+        return users
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+    
+
