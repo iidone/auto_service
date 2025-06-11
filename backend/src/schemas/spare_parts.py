@@ -12,3 +12,10 @@ class SparePartsSchema(BaseModel):
     
 class DeleteSparePartsRequest(BaseModel):
     ids: List[int] 
+    
+    
+class PartCreate(SparePartsSchema):
+    pass
+
+class PartResponce(SparePartsSchema):
+    id: int

@@ -250,7 +250,7 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
         try
         {
             var masterId = SelectedMaster.id;
-            var isSuccess = await _service.DeleteMaster(new[] { SelectedMaster.id });
+            var isSuccess = await _service.DeleteMaster(new[] { masterId });
             if (isSuccess)
             {
                 Console.WriteLine("Master is deleted");

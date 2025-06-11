@@ -79,16 +79,13 @@ public class MasterService
         try
         {
             var request = new { ids = masterIds };
-        
             var response = await _client.PostAsJsonAsync("http://127.0.0.1:8000/users/delete-many", request);
-        
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<Dictionary<string, object>>();
                 MasterChanged?.Invoke();
                 return true;
             }
-        
             var error = await response.Content.ReadAsStringAsync();
             throw new Exception($"Error: {error}");
         }
@@ -97,7 +94,6 @@ public class MasterService
             Console.WriteLine($"DeleteMasters error: {ex.Message}");
             return false;
         }
-        
     }
     
 }

@@ -5,7 +5,7 @@ from src.database import Base
 class ClientsModel(Base):
     __tablename__ = "clients"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     first_name: Mapped[str] = mapped_column()
     last_name: Mapped[str] = mapped_column()
     contact: Mapped[str] = mapped_column()

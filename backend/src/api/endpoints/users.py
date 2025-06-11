@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, status, Depends, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select, delete
 from src.models.users import UsersModel
-from src.schemas.users import DeleteMasterRequest, UsersSchema
+from src.schemas.users import DeleteMasterRequest, UsersSchema, UserResponce, UserCreate
 from src.api.dependencies import (
     add_to_blacklist,
     pwd_context, 
@@ -67,7 +67,7 @@ async def logout_user(
 
 
 
-@router.post("/add_user", response_model=UsersSchema, status_code=status.HTTP_201_CREATED, tags=["Пользователи"], summary=["Добавить пользователя"])
+@router.post("/add_user", response_model=UserCreate, status_code=status.HTTP_201_CREATED, tags=["Пользователи"], summary=["Добавить пользователя"])
 async def add_user(user_data: UsersSchema, session: SessionDep):
     try:
         existing_user = await session.execute(
@@ -104,7 +104,7 @@ async def add_user(user_data: UsersSchema, session: SessionDep):
 
 
 
-@router.get("/all_users", response_model=List[UsersSchema], tags=["Пользователи"], summary=["Получить всех пользователей"])
+@router.get("/all_users", response_model=List[UserResponce], tags=["Пользователи"], summary=["Получить всех пользователей"])
 async def get_all_users(session: SessionDep):
     try:
         result = await session.execute(select(UsersModel))
@@ -115,7 +115,7 @@ async def get_all_users(session: SessionDep):
     
     
 
-@router.get("/all_masters", response_model=List[UsersSchema], tags=["Пользователи"], summary=["Получить всех мастеров"])
+@router.get("/all_masters", response_model=List[UserResponce], tags=["Пользователи"], summary=["Получить всех мастеров"])
 async def get_all_masters(session: SessionDep):
     try:
         result = await session.execute(select(UsersModel).where(UsersModel.role == "master"))
@@ -125,7 +125,7 @@ async def get_all_masters(session: SessionDep):
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     
 
-@router.get("/all_managers", response_model=List[UsersSchema], tags=["Пользователи"], summary=["Получить всех менеджеров"])
+@router.get("/all_managers", response_model=List[UserResponce], tags=["Пользователи"], summary=["Получить всех менеджеров"])
 async def get_all_managers(session: SessionDep):
     try:
         result = await session.execute(select(UsersModel).where(UsersModel.role == "manager"))

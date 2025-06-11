@@ -3,14 +3,14 @@ from typing import List
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy import delete, select
 from src.models.spare_parts import SparePartsModel
-from src.schemas.spare_parts import SparePartsSchema, DeleteSparePartsRequest
+from src.schemas.spare_parts import SparePartsSchema, DeleteSparePartsRequest, PartCreate, PartResponce
 from src.api.dependencies import SessionDep
 
 router = APIRouter(prefix="/spare-parts")
 
 
 
-@router.post("/add_spare_parts", response_model=SparePartsSchema, status_code=status.HTTP_201_CREATED, tags=["Запчасти"], summary = ["Добавить новую запчасть"])
+@router.post("/add_spare_parts", response_model=PartCreate, status_code=status.HTTP_201_CREATED, tags=["Запчасти"], summary = ["Добавить новую запчасть"])
 async def add_spare_part(spare_parts_data: SparePartsSchema, session: SessionDep):
     try:
         new_spare_part = SparePartsModel(
@@ -84,7 +84,7 @@ async def delete_spare_parts(
         )
     
 
-@router.get("/all_spare_parts", response_model=List[SparePartsSchema], tags=["Запчасти"], summary = ["Получить все запчасти"])
+@router.get("/all_spare_parts", response_model=List[PartResponce], tags=["Запчасти"], summary = ["Получить все запчасти"])
 async def get_all_spare_parts(session: SessionDep):
     try:
         result = await session.execute(select(SparePartsModel))

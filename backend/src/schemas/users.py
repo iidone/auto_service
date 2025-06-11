@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing_extensions import List
 
 class UsersSchema(BaseModel):
-    id: int
     role: str
     username: str
     first_name: str
@@ -13,3 +12,9 @@ class UsersSchema(BaseModel):
 
 class DeleteMasterRequest(BaseModel):
     ids: List[int]
+    
+class UserCreate(UsersSchema):
+    pass
+
+class UserResponce(UsersSchema):
+    id: int

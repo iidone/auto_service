@@ -2,13 +2,13 @@ from typing_extensions import List
 from fastapi import APIRouter, HTTPException, status, Depends, Response
 from sqlalchemy import select
 from src.models.clients import ClientsModel
-from src.schemas.clients import ClientsSchema
+from src.schemas.clients import ClientsSchema, ClientCreate
 from src.api.dependencies import SessionDep
 
 
 router = APIRouter(prefix="/clients")
 
-@router.post("/add_client", response_model=ClientsSchema, status_code=status.HTTP_201_CREATED, tags=["Клиенты"], summary=["Добавить клиента"])
+@router.post("/add_client", response_model=ClientCreate, status_code=status.HTTP_201_CREATED, tags=["Клиенты"], summary=["Добавить клиента"])
 async def add_client(client_data: ClientsSchema, session: SessionDep):
     try:
         
