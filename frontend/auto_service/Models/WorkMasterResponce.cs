@@ -20,7 +20,7 @@ public class WorkMasterResponce
     {
         public int user_id { get; set; }
         public int client_id { get; set; }
-        public string desctiption { get; set; }
+        public string description { get; set; }
         public string date  { get; set; }
         public string next_maintenance { get; set; }
         public string comment { get; set; }

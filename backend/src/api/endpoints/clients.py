@@ -2,7 +2,7 @@ from typing_extensions import List
 from fastapi import APIRouter, HTTPException, status, Depends, Response
 from sqlalchemy import select
 from src.models.clients import ClientsModel
-from src.schemas.clients import ClientsSchema, ClientCreate
+from src.schemas.clients import ClientsSchema, ClientCreate, ClientResponce
 from src.api.dependencies import SessionDep
 
 
@@ -41,7 +41,7 @@ async def add_client(client_data: ClientsSchema, session: SessionDep):
         )
     
 
-@router.get("/all_clients", response_model=List[ClientsSchema], tags=["Клиенты"], summary=["Получить всех клиентов"])
+@router.get("/all_clients", response_model=List[ClientResponce], tags=["Клиенты"], summary=["Получить всех клиентов"])
 async def get_all_clients(session: SessionDep):
     try:
         result = await session.execute(select(ClientsModel))
