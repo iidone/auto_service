@@ -3,76 +3,115 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:vm="using:Auto_Service.ViewModels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" 
         x:Class="Auto_Service.Views.MasterWindow"
         Title="Панель мастера"
-        
-        Background="#1B1B1B"
+        MinWidth="600"
+        Width="800"
+        Height="600"
+        Background="#121212"
+        FontFamily="Segoe UI"
         x:DataType="vm:MasterWindowViewModel"
         x:Name="mainWindow">
-        
+
     <Window.Styles>
-        <Style Selector="TextBlock.Def">
-            <Setter Property="Margin" Value="20"/>
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="Foreground" Value="#D3D3D3"/>
-            <Setter Property="FontSize" Value="22"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Style Selector="TextBlock.header">
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="20,15"/>
         </Style>
-        <Style Selector="Border.b1">
-            <Setter Property="Background" Value="#333"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="CornerRadius" Value="20"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Width" Value="450"/>
-            <Setter Property="Height" Value="70"/>
+        
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="#1E1E1E"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Margin" Value="20,10"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        
+        <Style Selector="Button.work-item">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        
+        <Style Selector="Button.work-item:pointerover">
+            <Setter Property="Background" Value="#252525"/>
+        </Style>
+        
+        <Style Selector="TextBlock.work-text">
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="15"/>
+        </Style>
+        
+        <Style Selector="TextBlock.work-date">
+            <Setter Property="Foreground" Value="#9E9E9E"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,15,0"/>
         </Style>
     </Window.Styles>
-    
-    <StackPanel>
-        <TextBlock Classes="Def" Text="Ваши работы"/>
+
+    <Grid RowDefinitions="Auto,*" Margin="10">
         
-        <Border BorderBrush="AliceBlue" Background="#212121" CornerRadius="10" 
-                Margin="10" Padding="15" BorderThickness="1" Width="530">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300">
-                <ItemsControl ItemsSource="{Binding Works}">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10">
+            <TextBlock Classes="header" Text="Ваши текущие работы"/>
+            <Border Width="40" Height="40" CornerRadius="20" Background="#6c0075">
+                <TextBlock Text="{Binding Works.Count}" 
+                           Foreground="White"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Border>
+        </StackPanel>
+        
+        <Border Grid.Row="1" Classes="card">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10">
+                <ItemsControl ItemsSource="{Binding Works}" Background="Transparent">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Command="{Binding DataContext.ShowDetailsCommand, 
-                                    ElementName=mainWindow}"
-                                    CommandParameter="{Binding}">
-                                <Button.Styles>
-                                    <Style Selector="Button">
-                                        <Setter Property="Width" Value="450"/>
-                                        <Setter Property="Margin" Value="5"/>
-                                        <Setter Property="CornerRadius" Value="20"/>
-                                        <Setter Property="Height" Value="70"/>
-                                        <Setter Property="Background" Value="Transparent"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-                                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                                        <Setter Property="IsEnabled" Value="True"/>
-                                    </Style>
-                                    <Style Selector="Button:pointerover">
-                                        <Setter Property="BorderBrush" Value="White"/>
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                    </Style>
-                                </Button.Styles>
-                                <Border Classes="b1">
-                                    <TextBlock Classes="Def">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} {1} | {2}">
-                                                <Binding Path="Client.brand"/>
-                                                <Binding Path="Client.series"/>
-                                                <Binding Path="Maintenance.date"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </Border>
+                            <Button Classes="work-item"
+                                    Command="{Binding DataContext.ShowDetailsCommand, 
+                                            ElementName=mainWindow}"
+                                    CommandParameter="{Binding}"
+                                    Width="700">
+                                <Grid ColumnDefinitions="*,Auto" Margin="5">
+                                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                                        <TextBlock Classes="work-text">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding Path="Client.brand"/>
+                                                    <Binding Path="Client.series"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding Maintenance.description}" 
+                                                   Classes="work-text"
+                                                   Foreground="#9E9E9E"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="1" Orientation="Vertical"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Maintenance.date}" 
+                                                   Classes="work-date"/>
+                                        <Border Background="#4CAF50" 
+                                                CornerRadius="4"
+                                                Padding="5,2"
+                                                Margin="0,5,15,0">
+                                            <TextBlock Text="{Binding Maintenance.status}" 
+                                                       Foreground="White"
+                                                       FontSize="12"/>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
         </Border>
-    </StackPanel>
+    </Grid>
 </Window>
