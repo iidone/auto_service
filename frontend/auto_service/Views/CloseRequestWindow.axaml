@@ -1,0 +1,40 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Auto_Service.ViewModels"
+        x:Class="Auto_Service.Views.CloseRequestWindow"
+        x:DataType="vm:CloseRequestViewModel"
+        Title="Закрытие заявки"
+        Width="600"
+        Height="500">
+    
+    <Grid RowDefinitions="Auto,*,Auto,Auto" Margin="10">
+        <TextBlock Grid.Row="0" Text="Выберите использованные запчасти" 
+                   FontSize="18" Margin="0,0,0,10"/>
+        
+        <ListBox Grid.Row="1" ItemsSource="{Binding AvailableParts}" 
+                 SelectionMode="Multiple"
+                 SelectedItems="{Binding SelectedParts}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding title}"
+                              IsChecked="{Binding IsSelected, Mode=TwoWay}">
+                        <CheckBox.Styles>
+                            <Style Selector="CheckBox">
+                                <Setter Property="Margin" Value="5"/>
+                            </Style>
+                        </CheckBox.Styles>
+                    </CheckBox>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+            <TextBlock Text="{Binding TotalPrice, StringFormat='Итого: {0:C}'}"/>
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100"/>
+            <Button Content="Закрыть заявку" 
+                    Command="{Binding CloseRequestCommand}" 
+                    Width="150"
+                    Classes="PrimaryButton"/>
+        </StackPanel>
+    </Grid>
+</Window>

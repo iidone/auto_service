@@ -48,9 +48,11 @@ namespace Auto_Service.ViewModels
         
         private static void ShowDetails(WorkMasterResponce selectedWork)
         {
+            var detailWindow = new DetailWindow(selectedWork);
+            Console.WriteLine($"Loading for {selectedWork.Maintenance.id}");
             var detailsWindow = new DetailWindow
             {
-                DataContext = new DetailWindowViewModel(selectedWork)
+                DataContext = new DetailWindowViewModel(selectedWork,  detailWindow)
             };
             detailsWindow.Show();
         }

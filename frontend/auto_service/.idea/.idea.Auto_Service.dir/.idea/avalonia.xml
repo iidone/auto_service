@@ -9,6 +9,7 @@
         <entry key="Views/AddMaintenanceWindow.axaml" value="Auto_Service.csproj" />
         <entry key="Views/AddMasterWindow.axaml" value="Auto_Service.csproj" />
         <entry key="Views/AdminWindow.axaml" value="Auto_Service.csproj" />
+        <entry key="Views/CloseRequestWindow.axaml" value="Auto_Service.csproj" />
         <entry key="Views/DetailWindow.axaml" value="Auto_Service.csproj" />
         <entry key="Views/LoginWindow.axaml" value="Auto_Service.csproj" />
         <entry key="Views/MainWindow.axaml" value="Auto_Service.csproj" />

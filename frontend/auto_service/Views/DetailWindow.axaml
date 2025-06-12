@@ -159,7 +159,8 @@
             
             <Button Grid.Row="4" 
                     Classes="close-button"
-                    Content="Закрыть"
+                    Content="Закрыть заявку"
+                    Command = "{Binding ShowCloseRequestDialogCommand}"
                     HorizontalAlignment="Center"/>
         </Grid>
     </ScrollViewer>

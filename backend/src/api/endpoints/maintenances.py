@@ -3,7 +3,7 @@ from typing_extensions import List
 from fastapi import APIRouter, HTTPException, Path, status, Depends, Response
 from sqlalchemy import select, delete
 from src.models.maintenances import MaintenancesModel
-from src.schemas.maintenances import DeleteMaintenanceRequest, MaintenancesSchema, MaintenanceStatusUpdate, MaintenanceCreate, MaintenanceResponce
+from src.schemas.maintenances import DeleteMaintenanceRequest, MaintenancesSchema, MaintenanceStatusAndPriceUpdate, MaintenanceCreate, MaintenanceResponce
 from src.api.dependencies import (
     SessionDep,
 )
@@ -92,7 +92,7 @@ async def get_maintenances_with_clients(session: SessionDep):
 
 
 class MaintenanceWithClientResponse(BaseModel):
-    maintenance: MaintenancesSchema
+    maintenance: MaintenanceResponce
     client: ClientsSchema
 
 
@@ -115,7 +115,7 @@ async def get_maintenances_by_master(
         
         response = []
         for maintenance_model, client_model in result:
-            maintenance = MaintenancesSchema.from_orm(maintenance_model)
+            maintenance = MaintenanceResponce.from_orm(maintenance_model)
             client = ClientsSchema.from_orm(client_model)
             response.append(MaintenanceWithClientResponse(
                 maintenance=maintenance,
@@ -189,11 +189,11 @@ async def delete_maintenance(
     "/update_maintenance_status/{maintenance_id}",
     response_model=MaintenancesSchema,
     tags=["Работы"],
-    summary="Обновить статус заявки"
+    summary="Обновить статус и цену заявки"
 )
-async def update_maintenance_status(
+async def update_maintenance_status_and_price(
     maintenance_id: int,
-    status_update: MaintenanceStatusUpdate,
+    status_update: MaintenanceStatusAndPriceUpdate,
     session: SessionDep
 ):
     try:
@@ -214,6 +214,7 @@ async def update_maintenance_status(
                 detail=f"Недопустимый статус. Допустимые значения: {', '.join(valid_statuses)}"
             )
         
+        maintenance.price = status_update.price
         maintenance.status = status_update.status
         await session.commit()
         await session.refresh(maintenance)

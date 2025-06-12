@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Globalization;
 using Auto_Service.Models;
 
 namespace Auto_Service.Services
@@ -140,6 +141,34 @@ namespace Auto_Service.Services
                 Console.WriteLine($"Критическая ошибка: {ex}");
                 Console.WriteLine(ex);
                 return new List<MaintenancesModel>();
+            }
+        }
+
+
+        public async Task<bool> UpdateMaintenance(int WorkId, string NewStatus, decimal TotalPrice)
+        {
+            try
+            {
+                var TotalPriceString = TotalPrice.ToString(CultureInfo.InvariantCulture);
+                var responce = await _client.PatchAsJsonAsync($"http://127.0.0.1:8000/maintenances/update_maintenance_status/{WorkId}",
+                    new {status = "completed", price = TotalPriceString});
+                if (responce.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"HTTP Code: {responce.StatusCode}");
+                    return true;
+                }
+                else
+                {
+                    var errorContent = await responce.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error: {errorContent}");
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
     }
