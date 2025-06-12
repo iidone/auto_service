@@ -1,4 +1,5 @@
 from pydantic import BaseModel, ConfigDict
+from enum import Enum
 from typing_extensions import List
 
 
@@ -15,4 +16,22 @@ class MaintenancesSchema(BaseModel):
 
 
 class DeleteMaintenanceRequest(BaseModel):
-    ids: List[int] 
+    ids: List[int]
+    
+    
+class MaintenanceCreate(MaintenancesSchema):
+    pass
+
+class MaintenanceResponce(MaintenancesSchema):
+    id: int
+    
+class MaintenanceStatusUpdate(BaseModel):
+    status: str
+    
+    class Config:
+        schema_extra = {
+            "example":
+                {
+                    "status": "in_progress"
+                }
+        }

@@ -2,6 +2,7 @@ namespace Auto_Service.Models;
 
 public class MaintenancesModel
 {
+    public int id {get;set;}
     public int user_id { get; set; }
     public int client_id { get; set; }
     public string description { get; set; }

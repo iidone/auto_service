@@ -3,7 +3,7 @@ from typing_extensions import List
 from fastapi import APIRouter, HTTPException, Path, status, Depends, Response
 from sqlalchemy import select, delete
 from src.models.maintenances import MaintenancesModel
-from src.schemas.maintenances import DeleteMaintenanceRequest, MaintenancesSchema
+from src.schemas.maintenances import DeleteMaintenanceRequest, MaintenancesSchema, MaintenanceStatusUpdate, MaintenanceCreate, MaintenanceResponce
 from src.api.dependencies import (
     SessionDep,
 )
@@ -15,8 +15,8 @@ from src.schemas.clients import ClientsSchema
 router = APIRouter(prefix="/maintenances")
 
 
-@router.post("/add_maintenance", response_model=MaintenancesSchema, status_code=status.HTTP_201_CREATED, tags=["Работы"], summary=["добавить ТО"])
-async def add_maintenance(maintenance_data: MaintenancesSchema, session: SessionDep):
+@router.post("/add_maintenance", response_model=MaintenanceCreate, status_code=status.HTTP_201_CREATED, tags=["Работы"], summary=["добавить ТО"])
+async def add_maintenance(maintenance_data: MaintenanceCreate, session: SessionDep):
     try:
 
         new_maintenance = MaintenancesModel(
@@ -46,7 +46,7 @@ async def add_maintenance(maintenance_data: MaintenancesSchema, session: Session
 
 
 
-@router.get("/all_maintenances", response_model=List[MaintenancesSchema], tags=["Работы"], summary=["Получить все работы"])
+@router.get("/all_maintenances", response_model=List[MaintenanceResponce], tags=["Работы"], summary=["Получить все работы"])
 async def get_all_maintenances(session: SessionDep):
     try:
         result = await session.execute(select(MaintenancesModel))
@@ -59,7 +59,7 @@ async def get_all_maintenances(session: SessionDep):
 
 
 class MaintenanceWithClient(BaseModel):
-    maintenance: MaintenancesSchema
+    maintenance: MaintenanceResponce
     client: ClientsSchema
 
 @router.get("/maintenances_with_clients", 
@@ -182,4 +182,49 @@ async def delete_maintenance(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Ошибка при удалении ТО: {str(e)}"
+        )
+        
+        
+@router.patch(
+    "/update_maintenance_status/{maintenance_id}",
+    response_model=MaintenancesSchema,
+    tags=["Работы"],
+    summary="Обновить статус заявки"
+)
+async def update_maintenance_status(
+    maintenance_id: int,
+    status_update: MaintenanceStatusUpdate,
+    session: SessionDep
+):
+    try:
+        maintenance = await session.execute(
+            select(MaintenancesModel)
+            .where(MaintenancesModel.id == maintenance_id)
+        )
+        maintenance = maintenance.scalar_one_or_none()
+        if not maintenance:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Заявка не найдена"
+            )
+        valid_statuses = ["waiting", "in_progress", "completed", "cancelled"]
+        if status_update.status not in valid_statuses:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Недопустимый статус. Допустимые значения: {', '.join(valid_statuses)}"
+            )
+        
+        maintenance.status = status_update.status
+        await session.commit()
+        await session.refresh(maintenance)
+        
+        return maintenance
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        await session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка при обновлении статуса: {str(e)}"
         )
