@@ -62,9 +62,6 @@
                         <DataGridTextColumn Header= "Имя пользователя"
                                             Binding="{Binding username}"
                                             Width="3*"/>
-                        <DataGridTextColumn Header= "Пароль"
-                                            Binding="{Binding password}"
-                                            Width="5*"/>
                         <DataGridTextColumn Header= "Имя"
                                             Binding="{Binding first_name}"
                                             Width="3*"/>
