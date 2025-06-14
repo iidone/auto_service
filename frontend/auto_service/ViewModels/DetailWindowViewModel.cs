@@ -7,6 +7,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using ReactiveUI;
+using Telegram.Bot;
 
 namespace Auto_Service.ViewModels
 {
@@ -23,12 +24,14 @@ namespace Auto_Service.ViewModels
 
             ShowCloseRequestDialogCommand = ReactiveCommand.CreateFromTask(async work =>
             {
+                var token = "7962254151:AAEG6sQj3tAPNhxL-rt9ViNVo__LvHFzgDw";
+                var telegrambot = new TelegramBotClient(token);
                 var maintenance_service = new MaintenancesService(new HttpClient());
                 var closeWIndow = new CloseRequestWindow(selectedWork.Maintenance.id);
                 var PartsService = new SparePartsService(new HttpClient());
                 var dialog = new CloseRequestWindow(selectedWork.Maintenance.id)
                 {
-                    DataContext = new CloseRequestViewModel(PartsService, selectedWork.Maintenance.id,  closeWIndow, maintenance_service)
+                    DataContext = new CloseRequestViewModel(PartsService, selectedWork.Maintenance.id,  closeWIndow, maintenance_service, telegrambot, "791503720")
                 };
                 dialog.Show();
             });

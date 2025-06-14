@@ -87,7 +87,43 @@ async def get_maintenances_with_clients(session: SessionDep):
             status_code=500,
             detail=f"Database error: {str(e)}"
         )
+        
+
+@router.get("/maintenances_with_clients/{maintenance_id}", 
+           response_model=MaintenanceWithClient,
+           tags=["Работы"],
+           summary="Получить работу с клиентом по ID работы")
+async def get_maintenance_with_client_by_id(
+    maintenance_id: int,
+    session: SessionDep
+):
+    try:
+        query = select(MaintenancesModel, ClientsModel).\
+                join(ClientsModel, MaintenancesModel.client_id == ClientsModel.id).\
+                where(MaintenancesModel.id == maintenance_id)
+        
+        result = await session.execute(query)
+        maintenance, client = result.first()
+        
+        if not maintenance or not client:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Работа с ID {maintenance_id} не найдена"
+            )
+        
+        return MaintenanceWithClient(
+            maintenance=maintenance,
+            client=client
+        )
     
+    except HTTPException:
+        raise 
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Database error: {str(e)}"
+        )
+
 
 
 

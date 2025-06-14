@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -8,6 +9,8 @@ using Auto_Service.Models;
 using Auto_Service.Services;
 using Avalonia.Controls;
 using ReactiveUI;
+using Telegram.Bot;
+using Telegram.Bot.Types.InputFiles;
 
 namespace Auto_Service.ViewModels;
 
@@ -18,6 +21,8 @@ public class CloseRequestViewModel : ReactiveObject
     private SparePartsService _partsService;
     private readonly Window _currentWindow;
     private MaintenancesService _maintenance_service;
+    private readonly TelegramBotClient _telegramBot;
+    private readonly string _chatId;
     private int _workId;
     private decimal _totalPrice;
     
@@ -42,12 +47,19 @@ public class CloseRequestViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _totalPrice, value);
     }
     
-    public CloseRequestViewModel(SparePartsService partsService, int WorkId, Window currentWindow, MaintenancesService maintenancesService)
+    public CloseRequestViewModel(SparePartsService partsService, 
+        int workId, 
+        Window currentWindow, 
+        MaintenancesService maintenancesService,
+        TelegramBotClient telegramBot,
+        string chatId)
     {
         _currentWindow = currentWindow;
         _partsService = partsService;
-        _maintenance_service =  maintenancesService;
-        _workId =  WorkId;
+        _maintenance_service = maintenancesService;
+        _workId = workId;
+        _telegramBot = telegramBot;
+        _chatId = chatId;
         
         LoadAvailableParts();
         
@@ -68,7 +80,6 @@ public class CloseRequestViewModel : ReactiveObject
     
     private async Task LoadAvailableParts()
     {
-        Console.WriteLine(_workId);
         var parts = await _partsService.GetAllSpareParts();
         AvailableParts = new ObservableCollection<SparePartsModel>(parts);
     }
@@ -101,25 +112,54 @@ public class CloseRequestViewModel : ReactiveObject
                 Console.WriteLine("Не удалось обновить статус заявки");
                 return;
             }
+            
             if (selectedPartIds.Length > 0)
             {
                 var partsRemoved = await _partsService.DeletePart(selectedPartIds);
-            
                 if (!partsRemoved)
                 {
-                    Console.WriteLine("PartsRemoved");
+                    Console.WriteLine("Не удалось удалить запчасти");
                 }
             }
-
-            LoadAvailableParts();
-            _currentWindow.Close();
-            Console.WriteLine("Operation completed");
             
+            var response = await _maintenance_service.GetMaintenanceById(_workId);
+            if (response == null || response.Client == null)
+            {
+                Console.WriteLine("Не удалось получить данные для чека");
+                return;
+            }
+            
+            var receipt = new MaintenanceRequest(
+                Id: _workId,
+                ClientName: $"{response.Client.first_name} {response.Client.last_name}",
+                Car: $"{response.Client.brand} {response.Client.series}",
+                Description:$"{response.Maintenance.description}",
+                TelegramChatId: _chatId,
+                UsedParts: SelectedParts.Select(p => 
+                    new SparePart(p.Id, p.title, p.PriceDecimal)).ToList(),
+                TotalPrice: TotalPrice,
+                Date: DateTime.Now
+            );
+
+            var pdfBytes = new PdfReceiptGenerator().GenerateReceipt(receipt);
+            
+            if (!string.IsNullOrEmpty(_chatId))
+            {
+                Console.WriteLine("Отправка чека в Telegram...");
+                using var stream = new MemoryStream(pdfBytes);
+                await _telegramBot.SendDocumentAsync(
+                    chatId: _chatId,
+                    document: new InputOnlineFile(stream, $"Чек_{_workId}.{DateTime.Now}.pdf"),
+                    caption: $"Чек по заявке #{_workId}\nКлиент: {receipt.ClientName}\nСумма: {receipt.TotalPrice} ₽"
+                );
+                Console.WriteLine("Чек отправлен");
+            }
+
             _currentWindow.Close();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Operation Failed: {ex.Message}");
+            Console.WriteLine($"Ошибка при закрытии заявки: {ex.Message}");
         }
     }
 }

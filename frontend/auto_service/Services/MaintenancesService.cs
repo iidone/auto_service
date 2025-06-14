@@ -53,6 +53,34 @@ namespace Auto_Service.Services
             }
         }
 
+        public async Task<WorkByIdResponce> GetMaintenanceById(int id)
+        {
+            Debug.WriteLine($"launched GetMaintenanceById id: {id}");
+            try
+            {
+                var url = $"http://127.0.0.1:8000/maintenances/maintenances_with_clients/{id}";
+                Console.WriteLine($"URL: {url}");
+        
+                var response = await _client.GetAsync(url);
+        
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Ошибка в ответе: {errorContent}");
+                    return new WorkByIdResponce { Error = errorContent };
+                }
+                
+                var result = await response.Content.ReadFromJsonAsync<WorkByIdResponce>();
+        
+                return result ?? new WorkByIdResponce { Error = "Данные не получены" };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return new WorkByIdResponce { Error = ex.Message };
+            }
+        }
+
         public async Task<List<WorkMasterResponce>> GetAllWorks()
         {
             try
