@@ -1,0 +1,55 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:Auto_Service.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="Auto_Service.Views.AddUserWindow"
+        x:DataType="vm:AddUserViewModel"
+        Title="Добавление пользователя"
+        Width="400"
+        Height="450"
+        MinWidth="350"
+        WindowStartupLocation="CenterOwner"
+        FontFamily="Segoe UI">
+    
+    <Grid RowDefinitions="Auto,*" Margin="15">
+            <TextBlock Text="Новый пользователь" 
+                     FontSize="18"
+                     Foreground="White"
+                     HorizontalAlignment="Center"/>
+            
+        <StackPanel Grid.Row="1" Spacing="10" Margin="0 20">
+            <ComboBox ItemsSource="{Binding Roles}" 
+                      SelectedItem="{Binding SelectedRole}"
+                      Classes="MaterialComboBox"
+                      Width="200">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBox Watermark="Имя"
+                   Text="{Binding NewUser.first_name}"
+                   Classes="MaterialTextBox"/>
+            
+            <TextBox Watermark="Фамилия"
+                   Text="{Binding NewUser.last_name}"
+                   Classes="MaterialTextBox"/>
+            
+            <TextBox Watermark="Телефон"
+                   Text="{Binding NewUser.contact}"
+                   Classes="MaterialTextBox"/>
+            
+            <Grid ColumnDefinitions="*,*" Margin="0 20" HorizontalAlignment="Center">
+                <Button Grid.Column="1" 
+                      Content="Сохранить"
+                      Command="{Binding SaveCommand}"
+                      HorizontalAlignment="Center"
+                      Classes="MaterialContainedButton"
+                      Margin="5 0 0 0"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

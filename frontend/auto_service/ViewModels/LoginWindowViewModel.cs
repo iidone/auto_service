@@ -117,6 +117,8 @@ public class LoginWindowViewModel : ReactiveObject
                 return managerWindow;
         
             case "admin":
+                var adminWindow = new AdminWindow();
+                var export_service = new ExportService(adminWindow);
                 return new AdminWindow() 
                 { 
                     DataContext = new AdminWindowViewModel(
@@ -125,7 +127,9 @@ public class LoginWindowViewModel : ReactiveObject
                         managerService,
                         clientService,
                         sparePartsService,
-                        maintenanceService
+                        maintenanceService,
+                        export_service,
+                        adminWindow
                     )
                 };
         

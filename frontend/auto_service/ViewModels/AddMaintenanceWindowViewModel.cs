@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Auto_Service.Models;
 using Auto_Service.Services;
+using Avalonia.Controls;
 using DynamicData;
 using ReactiveUI;
 
@@ -16,6 +17,8 @@ public class AddMaintenanceWindowViewModel : ReactiveObject
     public ObservableCollection<ClientModel> Clients { get; } = new();
     public ObservableCollection<MasterModel> Masters { get; } = new();
     private MaintenancesService _service;
+    private Window _window;
+    private IWindowService _windowService;
     
     private ClientModel _selectedClient;
     public ClientModel SelectedClient
@@ -39,9 +42,13 @@ public class AddMaintenanceWindowViewModel : ReactiveObject
     public AddMaintenanceWindowViewModel(
         ClientService clientService,
         MasterService masterService,
-        MaintenancesService maintenancesService)
+        MaintenancesService maintenancesService,
+        Window window,
+        IWindowService windowService)
     {
+        _window = window;
         _service = maintenancesService;
+        _windowService = windowService;
         
         LoadClients(clientService);
         LoadMasters(masterService);
@@ -88,6 +95,7 @@ public class AddMaintenanceWindowViewModel : ReactiveObject
             if (isSuccess)
             {
                 Console.WriteLine("Added Maintenance");
+                _windowService.CloseWindow(_window);
             }
             else
             {

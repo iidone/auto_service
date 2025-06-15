@@ -14,7 +14,7 @@ public class AddClientWindowViewModel : ReactiveObject
 {
     public ClientModel NewClient { get; } = new ClientModel{};
     private  IWindowService _windowService;
-    private Window Window;
+    private Window _window;
     private  ClientService _service;
     private string first_name;
     private string last_name;
@@ -88,8 +88,9 @@ public class AddClientWindowViewModel : ReactiveObject
     
     
     public ReactiveCommand<Unit, Unit> AddClientCommand { get;}
-    public AddClientWindowViewModel(ClientService service, IWindowService windowService)
+    public AddClientWindowViewModel(ClientService service, IWindowService windowService, Window  window)
     {
+        _window = window;
         _windowService = windowService;
         _service = service;
         AddClientCommand = ReactiveCommand.CreateFromTask(SaveClient);
@@ -99,7 +100,11 @@ public class AddClientWindowViewModel : ReactiveObject
         try
         {
             var isSuccess = await _service.AddClient(NewClient);
-                Console.WriteLine($"Client Added, {isSuccess}");
+            Console.WriteLine($"Client Added, {isSuccess}");
+            if (isSuccess)
+            {
+                _windowService.CloseWindow(_window);
+            }
         }
         catch (HttpRequestException httpEx)
         {

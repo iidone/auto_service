@@ -53,7 +53,7 @@ public class MasterService
             var response = await _client.PostAsJsonAsync(
                 "http://127.0.0.1:8000/users/add_user", 
                 new {
-                    role = "master",
+                    role = master.role,
                     username = master.username,
                     first_name = master.first_name,
                     last_name = master.last_name,

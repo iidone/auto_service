@@ -41,11 +41,12 @@
                             Orientation="Horizontal"
                             Margin="5,5">
                     <Button Content="Добавить пользователя"
-
+                            Command="{Binding OpenAddUserCommand}"
                             Width="200"/>
                                 
                     <Button Content="Экспорт в Excel"
                             Width="200"
+                            Command = "{Binding ExportUsersCommand}"
                             Margin="5,5"/>
                     <Button Content="Обновить"
                             Command="{Binding LoadUsersCommand}"
@@ -54,6 +55,7 @@
                 </StackPanel>
                     
                 <DataGrid Grid.Row="1"
+                          x:Name = "UsersDataGrid"
                           Margin="10"
                           ItemsSource="{Binding Users}"
                           AutoGenerateColumns="False"
@@ -79,55 +81,56 @@
                 
             </Grid>
         </TabItem>
-            <TabItem Header="Мастера">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                    
-                <StackPanel Grid.Row="0"
-                            HorizontalAlignment="Right"
-                            Orientation="Horizontal"
-                            Margin="5,5">
-                    <Button Content="Добавить мастера"
-
-                            Width="200"/>
-                                
-                    <Button Content="Экспорт в Excel"
-                            Width="200"
-                            Margin="5,5"/>
-                    <Button Content="Обновить"
-                            Command="{Binding LoadMastersCommand}"
-                            Width="200"
-                            Margin="5,5"/>
-                </StackPanel>
-                    
-                <DataGrid Grid.Row="1"
-                          Margin="10"
-                          ItemsSource="{Binding Masters}"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header= "Имя пользователя"
-                                            Binding="{Binding username}"
-                                            Width="3*"/>
-                        <DataGridTextColumn Header= "Имя"
-                                            Binding="{Binding first_name}"
-                                            Width="3*"/>
-                        <DataGridTextColumn Header="Фамилия"
-                                            Binding="{Binding last_name}"
-                                            Width="4*"/>
-                        <DataGridTextColumn Header="Роль"
-                                            Binding="{Binding role}"
-                                            Width="3*"/>
-                        <DataGridTextColumn Header="Контакт"
-                                            Binding="{Binding contact}"
-                                            Width="4*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-            </TabItem>
+          <TabItem Header="Мастера">
+          <Grid>
+              <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+                  
+              <StackPanel Grid.Row="0"
+                          HorizontalAlignment="Right"
+                          Orientation="Horizontal"
+                          Margin="5,5">
+                  <Button Content="Добавить мастера"
+                          Command="{Binding OpenAddMasterCommand}"
+                          Width="200"/>
+                  <Button Content="Экспорт в Excel"
+                          Command = "{Binding ExportMastersCommand}"
+                          Width="200"
+                          Margin="5,5"/>
+                  <Button Content="Обновить"
+                          Command="{Binding LoadMastersCommand}"
+                          Width="200"
+                          Margin="5,5"/>
+              </StackPanel>
+                  
+              <DataGrid Grid.Row="1"
+                        Margin="10"
+                        ItemsSource="{Binding Masters}"
+                        AutoGenerateColumns="False"
+                        IsReadOnly="True">
+                  <DataGrid.Columns>
+                      <DataGridTextColumn Header= "Имя пользователя"
+                                          Binding="{Binding username}"
+                                          Width="3*"/>
+                      <DataGridTextColumn Header= "Имя"
+                                          Binding="{Binding first_name}"
+                                          Width="3*"/>
+                      <DataGridTextColumn Header="Фамилия"
+                                          Binding="{Binding last_name}"
+                                          Width="4*"/>
+                      <DataGridTextColumn Header="Роль"
+                                          Binding="{Binding role}"
+                                          Width="3*"/>
+                      <DataGridTextColumn Header="Контакт"
+                                          Binding="{Binding contact}"
+                                          Width="4*"/>
+                  </DataGrid.Columns>
+              </DataGrid>
+          </Grid>
+              
+          </TabItem>
             <TabItem Header="Менеджеры">
             <Grid>
                 <Grid.RowDefinitions>
@@ -140,10 +143,11 @@
                             Orientation="Horizontal"
                             Margin="5,5">
                     <Button Content="Добавить менеджера"
-
+                            Command = "{Binding OpenAddManagerCommand}"
                             Width="200"/>
                                 
                     <Button Content="Экспорт в Excel"
+                            Command = "{Binding ExportManagerCommand}"
                             Width="200"
                             Margin="5,5"/>
                     <Button Content="Обновить"
@@ -189,10 +193,11 @@
                             Orientation="Horizontal"
                             Margin="5,5">
                     <Button Content="Добавить клиента"
-
+                            Command = "{Binding OpenAddClientCommand}"
                             Width="200"/>
                                 
                     <Button Content="Экспорт в Excel"
+                            Command="{Binding ExportClientsCommand}"
                             Width="200"
                             Margin="5,5"/>
                     <Button Content="Обновить"
@@ -250,10 +255,11 @@
                             Orientation="Horizontal"
                             Margin="5,5">
                     <Button Content="Добавить ТО"
-
+                            Command = "{Binding OpenAddMaintenanceCommand}"
                             Width="200"/>
                                 
                     <Button Content="Экспорт в Excel"
+                            Command="{Binding ExportMaintenancesCommand}"
                             Width="200"
                             Margin="5,5"/>
                     <Button Content="Обновить"
@@ -308,10 +314,11 @@
                             Orientation="Horizontal"
                             Margin="5,5">
                     <Button Content="Добавить запчасть"
-
+                            Command="{Binding OpenAddSparePartsCommand}"
                             Width="200"/>
                                 
                     <Button Content="Экспорт в Excel"
+                            Command = "{Binding ExportPartsCommand}"
                             Width="200"
                             Margin="5,5"/>
                     <Button Content="Обновить"

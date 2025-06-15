@@ -12,7 +12,7 @@
 
     <Window.Styles>
         <Style Selector="TextBlock.section-header">
-            <Setter Property="Foreground" Value="#8a0096"/>
+            <Setter Property="Foreground" Value="#b900c9"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Margin" Value="15,20,15,10"/>

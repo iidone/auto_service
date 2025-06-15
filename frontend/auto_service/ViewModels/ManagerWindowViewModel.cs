@@ -77,7 +77,7 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
         OpenAddClientCommand = ReactiveCommand.Create(() =>
         {
             var addClientWindow = new AddClientWindow();
-            addClientWindow.DataContext = new AddClientWindowViewModel(_clientService, _windowService);
+            addClientWindow.DataContext = new AddClientWindowViewModel(_clientService, _windowService, addClientWindow);
             addClientWindow.Show();
         });
         OpenAddWorkCommand = ReactiveCommand.Create(() =>
@@ -85,7 +85,7 @@ public class ManagerWindowViewModel : ReactiveObject, IDisposable
             var _maintenance_service = new MaintenancesService(new HttpClient());
             var _masterService = new MasterService(new HttpClient());
             var addMaintenanceWindow = new AddMaintenanceWindow();
-            addMaintenanceWindow.DataContext = new AddMaintenanceWindowViewModel(_clientService, _service,  _maintenancesService);
+            addMaintenanceWindow.DataContext = new AddMaintenanceWindowViewModel(_clientService, _service,  _maintenancesService, addMaintenanceWindow, _windowService);
             addMaintenanceWindow.Show();
         });
 
