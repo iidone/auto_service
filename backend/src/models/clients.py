@@ -14,7 +14,7 @@ class ClientsModel(Base):
     number: Mapped[str] = mapped_column(unique=True)
     mileage: Mapped[str] = mapped_column()
     age: Mapped[str] = mapped_column()
-    vin: Mapped[str] = mapped_column()
+    vin: Mapped[str] = mapped_column(unique=True)
     last_maintenance: Mapped[str] = mapped_column()
 
     
