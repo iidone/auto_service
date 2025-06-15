@@ -25,8 +25,9 @@ class MaintenanceCreate(MaintenancesSchema):
 class MaintenanceResponce(MaintenancesSchema):
     id: int
     
-class MaintenanceStatusUpdate(BaseModel):
+class MaintenanceStatusAndPriceUpdate(BaseModel):
     status: str
+    price: str
     
     class Config:
         schema_extra = {

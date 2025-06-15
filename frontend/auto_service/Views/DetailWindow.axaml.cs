@@ -15,6 +15,7 @@ public partial class DetailWindow : Window
     
     public DetailWindow(WorkMasterResponce selectedWork) : this()
     {
-        DataContext = new DetailWindowViewModel(selectedWork);
+        var current_window = this;
+        DataContext = new DetailWindowViewModel(selectedWork, current_window);
     }
 }

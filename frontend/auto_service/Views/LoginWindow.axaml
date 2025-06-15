@@ -7,42 +7,105 @@
         x:Class="Auto_Service.Views.LoginWindow"
         x:DataType="vm:LoginWindowViewModel"
         Title="Автосервис 'АвтоТаз'"
-        Background="#1B1B1B">
+        MinWidth="400"
+        MinHeight="500"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
     
     <Window.Styles>
-        <Style Selector="TextBox.Def">
-            <Setter Property="FontSize" Value="18"/>
+        <Style Selector="Window">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="#1B1B1B" Opacity="0.9"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style Selector="TextBox.login-field">
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="Height" Value="50"/>
-            <Setter Property="Margin" Value="0 5"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="FontFamily" Value="Verdana"/>
-            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Margin" Value="0 10"/>
+            <Setter Property="Padding" Value="15 10"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Background" Value="#2C2C2C"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#3E3E3E"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="CaretBrush" Value="#4CAF50"/>
+            <Setter Property="SelectionBrush" Value="#4CAF50"/>
         </Style>
-        <Style Selector="TextBlock.text">
-            <Setter Property="Margin" Value="0 3"/>
-            <Setter Property="FontFamily" Value="Verdana"/>
+        
+        
+        <Style Selector="TextBlock.label">
+            <Setter Property="Margin" Value="0 5 0 0"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
             <Setter Property="Foreground" Value="#D3D3D3"/>
-            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
+        
+        <Style Selector="Button.login-btn">
+            <Setter Property="Margin" Value="0 25 0 0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#6c0075"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        
     </Window.Styles>
 
-    <StackPanel Margin="20" VerticalAlignment="Center" Width="500">
-        <TextBlock FontFamily="Verdana" FontSize="28" Foreground="#D3D3D3" HorizontalAlignment="Center">Авторизация</TextBlock>
-        <TextBlock Classes="text" Text="Username:"/>
-        <TextBox Text="{Binding Username}" Classes="Def" Watermark="Enter your username"/>
-        <TextBlock Classes="text" Text="Password:"/>
-        <TextBox Text="{Binding Password}" Classes="Def" PasswordChar="*" Watermark="Enter your password"/>
-        <Button Command="{Binding LoginCommand}" 
-                Margin="0 20" Padding="45 10" FontSize="18" FontFamily="Verdana" 
-                Foreground="#D3D3D3" Background="#2C2C2C" Width="150" Height="50" 
-                HorizontalAlignment="Center" Content="Войти"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                IsEnabled="{Binding !IsLoading}"/>
-        <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"/>
-        <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}"/>
-    </StackPanel>
+    <Grid>
+        <Image Source="/Assets/login-bg.jpg" Stretch="UniformToFill" Opacity="0.45"/>
+        
+        <Border CornerRadius="15" Margin="40" Background="#252525" Opacity="0.95">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+                <TextBlock Text="Авторизация" 
+                           FontSize="24" 
+                           FontFamily="Segoe UI Semibold" 
+                           Foreground="White" 
+                           HorizontalAlignment="Center" 
+                           Margin="0 0 0 20"/>
+                
+                <TextBlock Classes="label" Text="Имя пользователя"/>
+                <TextBox Text="{Binding Username}" 
+                         Classes="login-field" 
+                         Watermark="Введите логин"/>
+                
+                <TextBlock Classes="label" Text="Пароль" Margin="0 15 0 0"/>
+                <TextBox Text="{Binding Password}" 
+                         Classes="login-field" 
+                         PasswordChar="•" 
+                         Watermark="Введите пароль"/>
+                
+                <Button Command="{Binding LoginCommand}" 
+                        Classes="login-btn" 
+                        Content="Войти"
+                        HorizontalAlignment="Center"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        IsEnabled="{Binding !IsLoading}"/>
+                
+                <TextBlock Text="{Binding ErrorMessage}" 
+                           Foreground="#FF5252" 
+                           Margin="0 15" 
+                           TextWrapping="Wrap" 
+                           HorizontalAlignment="Center"/>
+                
+                <ProgressBar IsIndeterminate="True" 
+                              IsVisible="{Binding IsLoading}"
+                              Height="4"
+                              Margin="0 15"
+                              Background="Transparent"
+                              Foreground="#4CAF50"/>
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>
